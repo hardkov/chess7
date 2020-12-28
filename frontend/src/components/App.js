@@ -1,55 +1,46 @@
-import React from 'react';
-import Registration from './Registration.js'
-import Login from "./Login.js"
-import axios from 'axios'
+import React, { useState } from "react"
+import {
+    BrowserRouter as Router,
+    Switch, 
+    Route,
+} from "react-router-dom";
 
-class App extends React.Component{
-  constructor(props){
-    super(props);
+import Registration from "./Registration.js";
+import Header from "./Header.js";
+import Home from "./Home.js";
+import Login from "./Login.js";
+import Play from "./Play.js";
+import Users from "./Users.js";
 
-    this.state = {
-      userList: [],
+export default function App(){
+    const [token, setToken] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const handleSuccessfulLogin = (data) => {
+        setToken(data.accessToken);
     }
-  }
-
-  async componentDidMount(){
-    let response
-    
-    try {
-      response = await axios.get(
-        'http://localhost:5000/user/list',
-      )  
-    } catch(err){
-      console.log("login error", err)
-    }
-    
-    if(response.status === 200){
-      this.setState({
-        userList: response.data.userList,
-      })
-    }
-  }
-
-  render(){
-    let rows = this.state.userList.map((user, idx) => <tr key={user.id}><td>{user.username}</td></tr>);
 
     return (
-      <div>
-        <Registration/>
-        <Login/>
-        <div>
-          <table>
-            <tbody>          
-              <tr>
-                <th> Users </th>
-              </tr>
-              {rows}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <Router>
+            <Header />
+                <Switch>
+                    <Route exact path="/">
+                        <Home />
+                    </Route>
+                    <Route exact path="/login">
+                        <Login handleSuccessfulLogin={handleSuccessfulLogin}/>
+                    </Route>
+                    <Route exact path="/register">
+                        <Registration />
+                    </Route>
+                    <Route exact path="/play">
+                        <Play />
+                    </Route>
+                    <Route exact path="/users">
+                        <Users token={token} />
+                    </Route>
+                </Switch>
+        </Router>
     )
-  }
 }
 
-export default App;

@@ -17,8 +17,6 @@ let users = []
 // register
 router.post('/user/register', jsonParser, (req, res) => {
 
-    let user
-    fo
     let salt = crypto.randomBytes(16).toString('base64');
     
     let hash = crypto.createHmac('sha512', salt)
@@ -97,7 +95,7 @@ function vaildateJWT(req, res, next){
     if(req.headers['authorization']){
         try{
             let authorization = req.headers['authorization'].split(' ');
-        
+            console.log(authorization)
             if(authorization[0] !== 'Bearer') {
                 return res.status(401).send();
             } else{
