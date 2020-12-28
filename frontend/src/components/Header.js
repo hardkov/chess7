@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from 'react';
 import {AppBar, Toolbar, Button} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -10,8 +10,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Header(){
+export default function Header(props){
+    const [redirect, setRedirect] = useState(false);
+
     const classes = useStyles();
+    
+    
 
     return(
         <div className={classes.root}>
@@ -22,6 +26,7 @@ export default function Header(){
                 <Button color="inherit" component={RouterLink} to="/register">Register</Button>
                 <Button color="inherit" component={RouterLink} to="/play">Play</Button>
                 <Button color="inherit" component={RouterLink} to="/users">Users</Button>
+                <Button color="inherit" component={RouterLink} to="/logout">Logout</Button>
             </Toolbar>
             </AppBar>
         </div>

@@ -11,18 +11,25 @@ import Home from "./Home.js";
 import Login from "./Login.js";
 import Play from "./Play.js";
 import Users from "./Users.js";
+import Logout from "./Logout.js";
 
 export default function App(){
     const [token, setToken] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+    
     const handleSuccessfulLogin = (data) => {
+        setIsLoggedIn(true)
         setToken(data.accessToken);
+    }
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        setToken("");
     }
 
     return (
         <Router>
-            <Header />
+            <Header handleLogout={handleLogout}/>
                 <Switch>
                     <Route exact path="/">
                         <Home />
@@ -38,6 +45,9 @@ export default function App(){
                     </Route>
                     <Route exact path="/users">
                         <Users token={token} />
+                    </Route>
+                    <Route exact path="/logout">
+                        <Logout handleLogout={handleLogout} />
                     </Route>
                 </Switch>
         </Router>
