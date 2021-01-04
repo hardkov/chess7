@@ -7,12 +7,13 @@ export default function Users(props){
 
     useEffect(() => {
         const fetchUsers = async () => {
+            let token = localStorage.getItem("TOKEN");
             let response;
     
             try {
                 response =  await axios.get(
                     'http://localhost:5000/user/list',
-                    {headers: {Authorization: "Bearer " + props.token}}
+                    {headers: {Authorization: "Bearer " + token}}
                 )
             } catch(err) {
                 console.log("Users fetch ", err);

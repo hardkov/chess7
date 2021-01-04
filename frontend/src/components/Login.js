@@ -33,9 +33,11 @@ submit: {
 }));
 
 export default function Login(props) {
+
 const [username, setUsername] = useState("");
 const [password, setPassword] = useState("");
 const [redirect, setRedirect] = useState(false)
+
 
 const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -55,8 +57,8 @@ const handleSubmit = (event) => {
         )
         .then((response) => {
             if(response.status === 201){
-                props.handleSuccessfulLogin(response.data);
                 setRedirect(true);
+                props.updateLoginState(response.data.accessToken, username);
             }
         })
         .catch(error => {

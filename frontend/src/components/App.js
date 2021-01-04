@@ -1,8 +1,7 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
     BrowserRouter as Router,
     Switch, 
-    Route,
 } from "react-router-dom";
 
 import Registration from "./Registration.js";
@@ -12,43 +11,51 @@ import Login from "./Login.js";
 import Play from "./Play.js";
 import Users from "./Users.js";
 import Logout from "./Logout.js";
+import PrivateRoute from "../utils/PrivateRoute.js";
+import PublicRoute from "../utils/PublicRoute.js";
 
 export default function App(){
-    const [token, setToken] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    
-    const handleSuccessfulLogin = (data) => {
-        setIsLoggedIn(true)
-        setToken(data.accessToken);
+    const [isLogin, setIsLogin] = useState(false);
+    const [username, setUsername] = useState("");
+
+    const updateLoginState = (token, username) =>{
+        if(token){
+            localStorage.setItem("TOKEN", token);
+            localStorage.setItem("USERNAME", username);
+            setIsLogin(true)
+            setUsername(username)
+        } else {
+            localStorage.removeItem("TOKEN");
+            localStorage.removeItem("USERNAME");
+            setIsLogin(false)
+            setUsername("")    
+        }
     }
 
-    const handleLogout = () => {
-        setIsLoggedIn(false);
-        setToken("");
-    }
+    useEffect(() => {
+        const token = localStorage.getItem("TOKEN")
+        const username = localStorage.getItem("USERNAME");
+        
+        if(token){
+            setIsLogin(true)
+            setUsername(username)
+        } else{
+            setIsLogin(false)
+            setUsername("")
+        }
+
+    }, [])
 
     return (
         <Router>
-            <Header handleLogout={handleLogout}/>
+            <Header isLogin={isLogin} username={username} />
                 <Switch>
-                    <Route exact path="/">
-                        <Home />
-                    </Route>
-                    <Route exact path="/login">
-                        <Login handleSuccessfulLogin={handleSuccessfulLogin}/>
-                    </Route>
-                    <Route exact path="/register">
-                        <Registration />
-                    </Route>
-                    <Route exact path="/play">
-                        <Play />
-                    </Route>
-                    <Route exact path="/users">
-                        <Users token={token} />
-                    </Route>
-                    <Route exact path="/logout">
-                        <Logout handleLogout={handleLogout} />
-                    </Route>
+                    <PublicRoute component={Home} exact path="/" />
+                    <PublicRoute restricted={true} component={Login} exact path="/login" updateLoginState={updateLoginState} />
+                    <PublicRoute restricted={true} component={Registration} exact path="/register" updateLoginState={updateLoginState} />
+                    <PrivateRoute component={Play} exact path="/play" />
+                    <PrivateRoute component={Users} exact path="/users" />
+                    <PrivateRoute component={Logout} exact path="/logout" updateLoginState={updateLoginState}/>
                 </Switch>
         </Router>
     )

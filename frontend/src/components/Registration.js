@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Registration() {
+export default function Registration(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
@@ -56,8 +56,8 @@ export default function Registration() {
         )
         .then((response) => {
             if(response.status === 201){
-                // handle successful registration
                 setRedirect("True");
+                props.updateLoginState(response.data.accessToken, username);
             }
         })
         .catch(error => {

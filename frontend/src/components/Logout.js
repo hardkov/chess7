@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect } from "react-router-dom";
 
 export default function Logout(props){
-    props.handleLogout();
+    useEffect(() => {
+        props.updateLoginState(null);
+    })
 
     return (
         <Redirect to="/" />
