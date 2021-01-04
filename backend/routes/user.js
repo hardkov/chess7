@@ -18,7 +18,6 @@ let users = []
 router.post('/user/register', jsonParser, (req, res) => {
 
     let salt = crypto.randomBytes(16).toString('base64');
-    
     let hash = crypto.createHmac('sha512', salt)
                                 .update(req.body.password)
                                 .digest("base64");
@@ -26,22 +25,51 @@ router.post('/user/register', jsonParser, (req, res) => {
     req.body.password = salt + "$" + hash;
     
     let userId = users.length.toString();
+    
     users.push({
         id: userId,
         username: req.body.username,
         passwordHash: req.body.password,
     })
 
-    res.status(201).end();
+    salt = crypto.randomBytes(16).toString('base64');
+    hash = crypto.createHmac('sha512', salt)
+                                .update(userId)
+                                .digest("base64");
+
+    
+    req.body = {
+        id: userId,
+        username: req.body.username,
+        refresherKey: salt
+    }
+
+    console.log(req.body)
+
+    let token = jwt.sign(req.body, jwtSecret);
+    let b = Buffer.from(hash);
+    let refresherToken = b.toString("base64");
+
+    res.status(201).send({
+        accessToken: token,
+        refresherToken: refresherToken
+    })
+
 });
 
 
 // login
 router.post('/user/login', jsonParser, checkCredentialsMatch, (req, res) =>{
     let refresherId = req.body.id;
+    
     let salt = crypto.randomBytes(16).toString('base64');
-    let hash = crypto.createHmac('sha512', salt).update(refresherId).digest('base64');
+    
+    let hash = crypto.createHmac('sha512', salt)
+                                .update(refresherId)
+                                .digest('base64');
+
     req.body.refresherKey = salt;
+    console.log(req.body);
     let token = jwt.sign(req.body, jwtSecret);
     let b = Buffer.from(hash);
     let refresherToken = b.toString('base64');
@@ -95,7 +123,7 @@ function vaildateJWT(req, res, next){
     if(req.headers['authorization']){
         try{
             let authorization = req.headers['authorization'].split(' ');
-            console.log(authorization)
+
             if(authorization[0] !== 'Bearer') {
                 return res.status(401).send();
             } else{
