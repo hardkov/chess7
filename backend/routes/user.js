@@ -16,7 +16,6 @@ let users = []
 
 // register
 router.post('/user/register', jsonParser, (req, res) => {
-
     let salt = crypto.randomBytes(16).toString('base64');
     let hash = crypto.createHmac('sha512', salt)
                                 .update(req.body.password)
@@ -87,7 +86,7 @@ function checkCredentialsMatch(req, res, next){
     for(let user of users){
         if(user.username === req.body.username) userToBeLogged = user;
     }
-
+    
     if(userToBeLogged){
         let passwordFields = userToBeLogged.passwordHash.split('$');
         let salt = passwordFields[0];

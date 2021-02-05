@@ -1,29 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import CircularProgress from "@material-ui/core/CircularProgress"
 
 export default function Users(props){
-    
     const [userList, setUserList] = useState([]);
+    const [isFetching, setIsFetching] = useState(false);
+    
+    const fetchUsers = async () => {
+        let token = localStorage.getItem("TOKEN");
+        let response;
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            let token = localStorage.getItem("TOKEN");
-            let response;
-    
-            try {
-                response =  await axios.get(
-                    'http://localhost:5000/user/list',
-                    {headers: {Authorization: "Bearer " + token}}
-                )
-            } catch(err) {
-                console.log("Users fetch ", err);
-                setUserList([]);
-                return;
-            }
-    
-            setUserList(response.data.userList);
+        try {
+            response =  await axios.get(
+                'http://localhost:5000/user/list',
+                {headers: {Authorization: "Bearer " + token}}
+            )
+            setIsFetching(false);
+        } catch(err) {
+            console.log("Users fetch ", err);
+            return;
         }
 
+        setUserList(response.data.userList);
+    }
+        
+    useEffect(() => {
+        setIsFetching(true);
         fetchUsers()
     }, []); 
 
@@ -31,14 +33,20 @@ export default function Users(props){
 
     return (
         <div>
-        <table>
-            <tbody>          
-                <tr>
-                <th> Users </th>
-                </tr>
-                {rows}
-            </tbody>
-        </table>
+            { 
+                isFetching ?
+
+                <CircularProgress /> :
+
+                <table>
+                    <tbody>          
+                        <tr>
+                        <th> Users </th>
+                        </tr>
+                        {rows}
+                    </tbody>
+                </table>
+            }
         </div>
     )
 }

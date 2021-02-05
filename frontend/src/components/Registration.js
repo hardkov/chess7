@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,41 +34,41 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Registration(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [credentials, setCredentials] = useState({username: "", password: ""});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  } 
-
-  const handlePasswordChange = (event) => {
-      setPassword(event.target.value);
+  const handleCredentialsChange = (event) => {
+      setCredentials({
+          ...credentials,
+          [event.target.name]: event.target.value
+      })
   }
 
-  const handleSubmit = (event) => {
-        axios.post(
-            'http://localhost:5000/user/register',
-            {
-                username: username,
-                password: password
-            }
-        )
-        .then((response) => {
-            if(response.status === 201){
-                setRedirect("True");
-                props.updateLoginState(response.data.accessToken, username);
-            }
-        })
-        .catch(error => {
-            console.log('registration error', error)
-        })
+  const handleSubmit = async (event) => {
+    setIsLoading(true);
 
-        event.preventDefault();
+    try {
+      let response = await axios.post(
+          'http://localhost:5000/user/register',
+          {
+              username: credentials.username,
+              password: credentials.password
+          }
+      )
 
-        
+      if(response.status === 201){
+          setRedirect(true);
+          props.updateLoginState(response.data.accessToken, credentials.username);
+      }
+    } catch(error){
+        setErrorMessage("Registration error");
+    }
+    console.log("registerr")
+    setIsLoading(false);
   }
+
 
   const classes = useStyles();
 
@@ -84,52 +85,63 @@ export default function Registration(props) {
         <Typography component="h1" variant="h5">
           Register
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                name="username"
-                variant="outlined"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                autoFocus
-                onChange={handleUsernameChange}
-              />
+        {
+          isLoading ?
+
+          <CircularProgress /> :
+
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  name="username"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  autoFocus
+                  onChange={handleCredentialsChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  onChange={handleCredentialsChange}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                onChange={handlePasswordChange}
-              />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={ classes.submit }
+              
+            >
+              Register
+            </Button>
+            <Grid container alignItems="flex-end" direction="column">
+              <Grid item>
+                <Link component={RouterLink} to="/login">
+                  Already have an account? Login
+                </Link>
+              </Grid>
+              <Grid>
+                <Typography color="error">
+                  {errorMessage}
+                </Typography>
+              </Grid>
             </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            
-          >
-            Register
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link component={RouterLink} to="/login">
-                Already have an account? Login
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
+          </form>
+        }      
+    </div>
     </Container>
   );
 }
