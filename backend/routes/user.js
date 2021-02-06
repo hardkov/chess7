@@ -43,8 +43,6 @@ router.post('/user/register', jsonParser, (req, res) => {
         refresherKey: salt
     }
 
-    console.log(req.body)
-
     let token = jwt.sign(req.body, jwtSecret);
     let b = Buffer.from(hash);
     let refresherToken = b.toString("base64");
@@ -68,7 +66,7 @@ router.post('/user/login', jsonParser, checkCredentialsMatch, (req, res) =>{
                                 .digest('base64');
 
     req.body.refresherKey = salt;
-    console.log(req.body);
+
     let token = jwt.sign(req.body, jwtSecret);
     let b = Buffer.from(hash);
     let refresherToken = b.toString('base64');
@@ -109,9 +107,23 @@ function checkCredentialsMatch(req, res, next){
 
 // list users
 router.get("/user/list", vaildateJWT, (req, res) => {
-    res.json({
-        userList: users
-    })
+    let id = req.jwt.id;
+    let username = req.jwt.username;
+    let userToValidate;
+
+    for(let user of users){
+        if(user.id === id && user.username === username){
+            userToValidate = user;
+        }
+    }
+
+    if(userToValidate){
+        res.json({
+            userList: users
+        })
+    } else{
+        res.status(404).send({errors: ["No such user. Register first"]});
+    }
 })
 
 // logout (unvalidate token)
