@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {Link as RouterLink, Redirect} from "react-router-dom";
 import axios from 'axios';
 
@@ -38,6 +38,7 @@ export default function Registration(props) {
   const [credentials, setCredentials] = useState({username: "", password: ""});
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isMounted = useRef(1);
 
   const handleCredentialsChange = (event) => {
       setCredentials({
@@ -47,28 +48,41 @@ export default function Registration(props) {
   }
 
   const handleSubmit = async (event) => {
-    setIsLoading(true);
+          event.preventDefault();
+          updateState(() => setIsLoading(true));
 
-    try {
-      let response = await axios.post(
-          'http://localhost:5000/user/register',
-          {
-              username: credentials.username,
-              password: credentials.password
+          try {
+              let response = await axios.post(
+                  'http://localhost:5000/user/register',
+                  {
+                      username: credentials.username,
+                      password: credentials.password
+                  }
+              )
+
+              if(response.status === 201){
+                  props.updateLoginState(response.data.accessToken, credentials.username);
+                  updateState(() => setRedirect(true));
+              }
+
+          } catch(error){
+              updateState(() => setErrorMessage("Register error"));
           }
-      )
 
-      if(response.status === 201){
-          setRedirect(true);
-          props.updateLoginState(response.data.accessToken, credentials.username);
-      }
-    } catch(error){
-        setErrorMessage("Registration error");
-    }
-    console.log("registerr")
-    setIsLoading(false);
+          updateState(() => setIsLoading(false));
   }
 
+  useEffect(() => {
+      isMounted.current = 1;
+      
+      return () => { isMounted.current = 0; };
+  })
+
+  const updateState = (callback) => {
+      if(isMounted.current){
+          callback();
+      }
+  }
 
   const classes = useStyles();
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef} from 'react';
 import {Link as RouterLink, Redirect} from "react-router-dom";
 import axios from 'axios';
 
@@ -39,6 +39,7 @@ const [redirect, setRedirect] = useState(false)
 const [credentials, setCredentials] = useState({username: "", password: ""})
 const [errorMessage, setErrorMessage] = useState("");
 const [isLoading, setIsLoading] = useState(false);
+const isMounted = useRef(1);
 
 const handleCredentialsChange = (event) => {
     setCredentials({
@@ -48,8 +49,9 @@ const handleCredentialsChange = (event) => {
 }
 
 const handleSubmit = async (event) => {
-        setIsLoading(true);
-        console.log("login")
+        event.preventDefault();
+        updateState(() => setIsLoading(true));
+
         try {
             let response = await axios.post(
                 'http://localhost:5000/user/login',
@@ -61,13 +63,26 @@ const handleSubmit = async (event) => {
 
             if(response.status === 201){
                 props.updateLoginState(response.data.accessToken, credentials.username);
-                setRedirect(true);
+                updateState(() => setRedirect(true));
             }
+
         } catch(error){
-           setErrorMessage("Login error");
+            updateState(() => setErrorMessage("Login error"));
         }
-        
-        // setIsLoading(false);
+
+        updateState(() => setIsLoading(false));
+}
+
+useEffect(() => {
+    isMounted.current = 1;
+    
+    return () => { isMounted.current = 0; };
+})
+
+const updateState = (callback) => {
+    if(isMounted.current){
+        callback();
+    }
 }
 
 const classes = useStyles();
