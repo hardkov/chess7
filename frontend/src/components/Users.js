@@ -18,6 +18,7 @@ export default function Users(props){
             setIsFetching(false);
         } catch(err) {
             console.log("Users fetch ", err);
+            setIsFetching(false);
             return;
         }
 
