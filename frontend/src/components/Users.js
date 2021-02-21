@@ -1,54 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import CircularProgress from "@material-ui/core/CircularProgress"
+import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
-export default function Users(props){
-    const [userList, setUserList] = useState([]);
-    const [isFetching, setIsFetching] = useState(false);
-    
-    const fetchUsers = async () => {
-        let token = localStorage.getItem("TOKEN");
-        let response;
+import { getUserList } from "../api/userAPI";
+import { challangePlayer } from "../api/gameAPI";
 
-        try {
-            response =  await axios.get(
-                'http://localhost:5000/user/list',
-                {headers: {Authorization: "Bearer " + token}}
-            )
-            setIsFetching(false);
-        } catch(err) {
-            console.log("Users fetch ", err);
-            setIsFetching(false);
-            return;
-        }
+export default function Users() {
+  const [userList, setUserList] = useState([]);
+  const [redirect, setRedirect] = useState(false);
 
-        setUserList(response.data.userList);
+  useEffect(() => {
+    async function fetchData() {
+      const userList = await getUserList();
+      setUserList(userList);
     }
-        
-    useEffect(() => {
-        setIsFetching(true);
-        fetchUsers()
-    }, []); 
 
-    let rows = userList.map((user) => <tr key={user.id}><td>{user.username}</td></tr>);
+    fetchData();
+  }, []);
 
+  const challangeSelectedPlayer = async (username) => {
+    const isChallanged = await challangePlayer(username);
+
+    if (isChallanged) {
+      setRedirect(true);
+    }
+  };
+
+  let rows = userList.map((user) => {
     return (
-        <div>
-            { 
-                isFetching ?
+      <tr key={user.id}>
+        <th>{user.username}</th>
+        <td>
+          <Button
+            size="small"
+            orientation="vertical"
+            color="primary"
+            aria-label="vertical outlined primary button group"
+            variant="contained"
+            onClick={() => challangeSelectedPlayer(user.username)}
+          >
+            Challange
+          </Button>
+        </td>
+      </tr>
+    );
+  });
 
-                <CircularProgress /> :
+  if (redirect) {
+    return <Redirect to="/play" />;
+  }
 
-                <table>
-                    <tbody>          
-                        <tr>
-                        <th> Users </th>
-                        </tr>
-                        {rows}
-                    </tbody>
-                </table>
-            }
-        </div>
-    )
+  if (userList == null) return <div />;
+
+  return (
+    <div>
+      <table>
+        <tbody>
+          <tr>
+            <th> Users </th>
+          </tr>
+          {rows}
+        </tbody>
+      </table>
+    </div>
+  );
 }
-
