@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link as RouterLink, Redirect } from "react-router-dom";
+import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
@@ -11,9 +10,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
-import { logUserIn } from "../api/userAPI";
-import { useUserContext } from "../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,65 +31,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
-  const { setLoginState } = useUserContext();
+const LoginForm = ({
+  isLoading,
+  errorMessage,
+  handleCredentialsChange,
+  handleSubmit,
+}) => {
   const classes = useStyles();
-  const [redirect, setRedirect] = useState(false);
-  const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
-  });
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const isMounted = useRef(1);
-
-  const handleCredentialsChange = (event) => {
-    setCredentials({
-      ...credentials,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    updateState(() => setIsLoading(true));
-
-    const didLogIn = await logUserIn(
-      credentials.username,
-      credentials.password
-    );
-
-    if (didLogIn == null) {
-      updateState(() => setErrorMessage("Login error"));
-    } else {
-      setLoginState(true);
-      updateState(() => setRedirect(true));
-    }
-
-    updateState(() => setIsLoading(false));
-  };
-
-  useEffect(() => {
-    isMounted.current = 1;
-
-    return () => {
-      isMounted.current = 0;
-    };
-  });
-
-  const updateState = (callback) => {
-    if (isMounted.current) {
-      callback();
-    }
-  };
-
-  if (redirect) {
-    return <Redirect to="/" />;
-  }
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}></Avatar>
         <Typography component="h1" variant="h5">
@@ -140,7 +87,7 @@ const Login = () => {
             </Button>
             <Grid container alignItems="flex-end" direction="column">
               <Grid item>
-                <Link component={RouterLink} to="/login">
+                <Link component={RouterLink} to="/register">
                   Don&apos;t have an account? Register
                 </Link>
               </Grid>
@@ -155,4 +102,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginForm;

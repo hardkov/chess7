@@ -3,10 +3,10 @@ import Chessboard from "chessboardjsx";
 import Grid from "@material-ui/core/Grid";
 import GameChat from "./GameChat.js";
 import GamePanel from "./GamePanel.js";
-import { getSocket, setMoveConfirmationCallback } from "../api/socket.js";
+import { getSocket, setMoveConfirmationCallback } from "../services/socket.js";
 import Chess from "chess.js";
 
-import { checkIfIsPlaying } from "../api/gameAPI";
+import { checkIfIsPlaying } from "../services/gameService";
 
 export default function Play() {
   const [position, setPosition] = useState("start");

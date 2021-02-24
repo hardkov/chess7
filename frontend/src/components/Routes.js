@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Switch } from "react-router-dom";
 
 import Header from "./Header";
 import Home from "./Home.js";
-import Registration from "./Registration.js";
-import Login from "./Login.js";
+import Registration from "./Registration/Registration.js";
+import Login from "./Login/Login.js";
 import Play from "./Play.js";
 import Users from "./Users.js";
 import Logout from "./Logout.js";

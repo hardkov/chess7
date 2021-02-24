@@ -1,13 +1,14 @@
 import axios from "axios";
 
-const challangePlayer = async (username) => {
-  const token = localStorage.getItem("TOKEN");
+import { CHALLANGE_ENDPOINT, IS_PLAYING_ENDPOINT } from "./config";
+import { authHeaders } from "../helpers/auth";
 
+const challangePlayer = async (username) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/game/start",
+      CHALLANGE_ENDPOINT,
       { username: username },
-      { headers: { Authorization: "Bearer " + token } }
+      { headers: authHeaders() }
     );
 
     if (response.status === 201) {
@@ -19,11 +20,9 @@ const challangePlayer = async (username) => {
 };
 
 const checkIfIsPlaying = async () => {
-  const token = localStorage.getItem("TOKEN");
-
   try {
-    let response = await axios.get("http://localhost:5000/game/playing", {
-      headers: { Authorization: "Bearer " + token },
+    let response = await axios.get(IS_PLAYING_ENDPOINT, {
+      headers: authHeaders(),
     });
 
     if (response.status === 201) {

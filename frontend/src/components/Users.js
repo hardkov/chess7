@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
-import { getUserList } from "../api/userAPI";
-import { challangePlayer } from "../api/gameAPI";
+import { getUserList } from "../services/userService";
+import { challangePlayer } from "../services/gameService";
 
 export default function Users() {
   const [userList, setUserList] = useState([]);
@@ -26,7 +26,13 @@ export default function Users() {
     }
   };
 
-  let rows = userList.map((user) => {
+  if (redirect) {
+    return <Redirect to="/play" />;
+  }
+
+  if (userList == null) return <div />;
+
+  const rows = userList.map((user) => {
     return (
       <tr key={user.id}>
         <th>{user.username}</th>
@@ -45,12 +51,6 @@ export default function Users() {
       </tr>
     );
   });
-
-  if (redirect) {
-    return <Redirect to="/play" />;
-  }
-
-  if (userList == null) return <div />;
 
   return (
     <div>
