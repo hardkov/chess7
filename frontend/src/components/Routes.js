@@ -6,7 +6,6 @@ import Home from "./Home.js";
 import Registration from "./Registration/Registration.js";
 import Login from "./Login/Login.js";
 import Play from "./Play.js";
-import Users from "./Users.js";
 import Logout from "./Logout.js";
 import PrivateRoute from "./utils/PrivateRoute.js";
 import PublicRoute from "./utils/PublicRoute.js";
@@ -25,7 +24,6 @@ export default function Routes() {
           path="/register"
         />
         <PrivateRoute component={Play} exact path="/play" />
-        <PrivateRoute component={Users} exact path="/users" />
         <PrivateRoute component={Logout} exact path="/logout" />
       </Switch>
     </Router>

@@ -49,7 +49,6 @@ export default function Header() {
 
   const loggedInLinks = [
     { to: "/play", name: "PLAY" },
-    { to: "/users", name: "USERS" },
     { to: "/logout", name: "LOGOUT" },
   ];
 
@@ -85,7 +84,7 @@ export default function Header() {
           </div>
           {accessGained && (
             <Typography
-              color="textSecondary"
+              color="textPrimary"
               variant="h5"
               className={classes.username}
             >
