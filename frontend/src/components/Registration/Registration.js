@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import { registerUser } from "../../services/authService";
 import { reducer, actionTypes } from "../../reducers/registrationReducer";
 import RegistrationForm from "./RegistrationForm";
+import Animation from "../utils/Animation";
 
 const initialState = {
   username: "",
@@ -47,12 +48,14 @@ const Registration = () => {
   }
 
   return (
-    <RegistrationForm
-      isLoading={state.isLoading}
-      errorMessage={state.errorMessage}
-      handleCredentialsChange={handleCredentialsChange}
-      handleSubmit={handleSubmit}
-    />
+    <Animation onRender>
+      <RegistrationForm
+        isLoading={state.isLoading}
+        errorMessage={state.errorMessage}
+        handleCredentialsChange={handleCredentialsChange}
+        handleSubmit={handleSubmit}
+      />
+    </Animation>
   );
 };
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -6,17 +7,15 @@ import {
   Typography,
   IconButton,
 } from "@material-ui/core";
-
-// import ButtonGroup from "@material-ui/core/ButtonGroup";
 import HomeIcon from "@material-ui/icons/Home";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link as RouterLink } from "react-router-dom";
 
 import {
   currentUser,
   isLoggedIn,
   currentUserValue,
 } from "../services/authService";
+import Animation from "./utils/Animation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(3),
   },
 
-  buttonWrapper: {
+  buttonContainer: {
     display: "flex",
     flex: 1,
     justifyContent: "flex-end",
@@ -44,7 +43,7 @@ export default function Header() {
 
   useEffect(() => {
     currentUser().subscribe((u) => setUser(u));
-  });
+  }, []);
 
   const accessGained = isLoggedIn();
 
@@ -81,7 +80,9 @@ export default function Header() {
           <IconButton color="secondary" component={RouterLink} to="/">
             <HomeIcon fontSize="large" />
           </IconButton>
-          <div className={classes.buttonWrapper}>{buttonLinksComponents}</div>
+          <div className={classes.buttonContainer}>
+            <Animation onRender>{buttonLinksComponents}</Animation>
+          </div>
           {accessGained && (
             <Typography
               color="textSecondary"

@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import { loginUser } from "../../services/authService";
 import { reducer, actionTypes } from "../../reducers/loginReducer";
 import LoginForm from "./LoginForm";
+import Animation from "../utils/Animation";
 
 const initialState = {
   username: "",
@@ -47,12 +48,14 @@ const Login = () => {
   }
 
   return (
-    <LoginForm
-      isLoading={state.isLoading}
-      errorMessage={state.errorMessage}
-      handleCredentialsChange={handleCredentialsChange}
-      handleSubmit={handleSubmit}
-    />
+    <Animation onMount>
+      <LoginForm
+        isLoading={state.isLoading}
+        errorMessage={state.errorMessage}
+        handleCredentialsChange={handleCredentialsChange}
+        handleSubmit={handleSubmit}
+      />
+    </Animation>
   );
 };
 
