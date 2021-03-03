@@ -21,12 +21,12 @@ const server = app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-// const io = socketio(server, {
-//   cors: {
-//     origin: "http://localhost:3000",
-//     allowedHeaders: ["GET", "POST"],
-//   },
-// });
+const io = socketio(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    allowedHeaders: ["GET", "POST"],
+  },
+});
 
 // const socketJWTMiddleware = (socket, next) => {
 //   const { token } = socket.handshake.query;
@@ -43,30 +43,34 @@ const server = app.listen(port, () => {
 
 // io.use(socketJWTMiddleware);
 
-// io.on("connection", (socket) => {
-//   console.log(game.games);
-//   // let userGame = game.userGame(socket.userData.username);
-//   // if(userGame){
-//   //     socket.join(userGame.gameId);
-//   // }
+io.on("connection", (socket) => {
+  console.log(socket.id);
+  socket.on("message", (data) => {
+    console.log(data);
+  });
+  socket.send("hello there");
+  // let userGame = game.userGame(socket.userData.username);
+  // if(userGame){
+  //     socket.join(userGame.gameId);
+  // }
 
-//   io.on("move", (move) => {
-//     // userGame = game.userGame(socket.userData.username);
-//     console.log("in move");
-//     console.log(move);
-//     if (userGame.playerToMove != socket.userData.username) {
-//       socket.emit("moveConfirmation", "ILLEGAL_MOVE");
-//       return;
-//     }
+  //   io.on("move", (move) => {
+  //     // userGame = game.userGame(socket.userData.username);
+  //     console.log("in move");
+  //     console.log(move);
+  //     if (userGame.playerToMove != socket.userData.username) {
+  //       socket.emit("moveConfirmation", "ILLEGAL_MOVE");
+  //       return;
+  //     }
 
-//     let moveConfirmation = userGame.gameClient.move(move);
+  //     let moveConfirmation = userGame.gameClient.move(move);
 
-//     if (moveConfirmation == null) {
-//       socket.emit("moveConfirmation", "ILLEGAL_MOVE");
-//       return;
-//     }
+  //     if (moveConfirmation == null) {
+  //       socket.emit("moveConfirmation", "ILLEGAL_MOVE");
+  //       return;
+  //     }
 
-//     socket.emit("moveConfirmation", move);
-//     // socket.to(userGame.gameId).emit("moveConfirmation", move);
-//   });
-// });
+  //     socket.emit("moveConfirmation", move);
+  //     // socket.to(userGame.gameId).emit("moveConfirmation", move);
+  //   });
+});
