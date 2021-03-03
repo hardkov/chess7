@@ -4,7 +4,6 @@ import gsap from "gsap";
 const animate = (element) => {
   gsap.from(element, {
     duration: 1,
-    y: -200,
     opacity: 0,
   });
 };

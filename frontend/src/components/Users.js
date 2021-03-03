@@ -84,7 +84,7 @@ export default function Users() {
   });
 
   return (
-    <TableContainer className={classes.table} component={Paper}>
+    <TableContainer className={classes.table} component={Paper} elevation={3}>
       <Table>
         <TableHead>
           <TableRow>
@@ -93,7 +93,6 @@ export default function Users() {
                 <Box fontWeight="fontWeightBold">User</Box>
               </Typography>
             </TableCell>
-            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>{rows}</TableBody>
