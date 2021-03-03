@@ -3,7 +3,7 @@ import Chessboard from "chessboardjsx";
 import Grid from "@material-ui/core/Grid";
 import GameChat from "./GameChat.js";
 import GamePanel from "./GamePanel.js";
-import { getSocket, setMoveConfirmationCallback } from "../services/socket.js";
+import { getSocket } from "../services/socket.js";
 import Chess from "chess.js";
 
 import { checkIfIsPlaying } from "../services/gameService";
@@ -21,14 +21,6 @@ export default function Play() {
     }
   };
 
-  const moveConfirmationCallback = (message) => {
-    console.log(message);
-    if (message === "ILLEGAL_MOVE") {
-      game.undo();
-      setPosition(game.fen());
-    }
-  };
-
   useEffect(() => {
     async function fetchData() {
       const isPlaying = await checkIfIsPlaying();
@@ -38,7 +30,6 @@ export default function Play() {
       }
     }
     fetchData();
-    setMoveConfirmationCallback(moveConfirmationCallback);
   }, []);
 
   const onDrop = async ({ sourceSquare, targetSquare }) => {

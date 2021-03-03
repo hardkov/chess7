@@ -6,14 +6,19 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-
+import MuiTableCell from "@material-ui/core/TableCell";
 import { getUserList } from "../services/userService";
 import { challangePlayer } from "../services/gameService";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core";
+
+const TableCell = withStyles({
+  root: {
+    borderBottom: "none",
+  },
+})(MuiTableCell);
 
 const useStyles = makeStyles({
   table: {
@@ -53,7 +58,7 @@ export default function Users() {
     return (
       <TableRow key={user.id}>
         <TableCell>
-          <Typography>{user.username}</Typography>
+          <Typography color="textSecondary">{user.username}</Typography>
         </TableCell>
         <TableCell>
           <Button

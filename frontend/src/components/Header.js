@@ -76,8 +76,13 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar position="sticky">
         <Toolbar>
-          <IconButton color="secondary" component={RouterLink} to="/">
-            <HomeIcon fontSize="large" />
+          <IconButton
+            color="secondary"
+            size="small"
+            component={RouterLink}
+            to="/"
+          >
+            <HomeIcon />
           </IconButton>
           <div className={classes.buttonContainer}>
             <Animation onRender>{buttonLinksComponents}</Animation>

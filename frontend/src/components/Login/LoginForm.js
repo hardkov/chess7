@@ -89,7 +89,7 @@ const LoginForm = ({
               </Button>
               <Grid container alignItems="flex-end" direction="column">
                 <Grid item>
-                  <Link component={RouterLink} to="/register">
+                  <Link color="secondary" component={RouterLink} to="/register">
                     Don&apos;t have an account? Register
                   </Link>
                 </Grid>
