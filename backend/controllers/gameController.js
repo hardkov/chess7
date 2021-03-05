@@ -38,7 +38,12 @@ function checkIfPlaying(req, res) {
     return res.status(400).send({ errors: ["This user does not play a game"] });
   }
 
-  res.status(201).send();
+  res.status(201).send({
+    gameId: currentlyPlayedGame.id,
+    fen: currentlyPlayedGame.gameClient.fen(),
+    whitePlayerName: currentlyPlayedGame.whitePlayerName,
+    blackPlayerName: currentlyPlayedGame.blackPlayerName,
+  });
 }
 
 module.exports = {

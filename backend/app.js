@@ -4,12 +4,16 @@ const socketio = require("socket.io");
 
 const userRouter = require("./routes/user.js");
 const gameRouter = require("./routes/game.js");
+const socketJWTMiddleware = require("./middlewares/socketJWTMIddleware");
+const dataValidationMiddleware = require("./middlewares/socketDataValidationMiddleware.js");
+const moveHandler = require("./eventHandlers/moveHandler");
 
 const port = process.env.PORT || 5000;
 const app = express();
 
 //tmp cors enabling
 const cors = require("cors");
+const { findGameWithPlayer } = require("./models/game");
 // const user = require("./routes/user.js");
 app.use(cors());
 
@@ -28,49 +32,8 @@ const io = socketio(server, {
   },
 });
 
-// const socketJWTMiddleware = (socket, next) => {
-//   const { token } = socket.handshake.query;
-//   if (token) {
-//     try {
-//       const userData = jwt.verify(token, jwtSecret);
-//       socket.userData = userData;
-//       return next();
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-// };
-
-// io.use(socketJWTMiddleware);
-
-io.on("connection", (socket) => {
-  console.log(socket.id);
-  socket.on("message", (data) => {
-    console.log(data);
-  });
-  socket.send("hello there");
-  // let userGame = game.userGame(socket.userData.username);
-  // if(userGame){
-  //     socket.join(userGame.gameId);
-  // }
-
-  //   io.on("move", (move) => {
-  //     // userGame = game.userGame(socket.userData.username);
-  //     console.log("in move");
-  //     console.log(move);
-  //     if (userGame.playerToMove != socket.userData.username) {
-  //       socket.emit("moveConfirmation", "ILLEGAL_MOVE");
-  //       return;
-  //     }
-
-  //     let moveConfirmation = userGame.gameClient.move(move);
-
-  //     if (moveConfirmation == null) {
-  //       socket.emit("moveConfirmation", "ILLEGAL_MOVE");
-  //       return;
-  //     }
-
-  //     socket.emit("moveConfirmation", move);
-  //     // socket.to(userGame.gameId).emit("moveConfirmation", move);
-  //   });
+io.of("/moves").use(socketJWTMiddleware);
+io.of("/moves").use(dataValidationMiddleware);
+io.of("/moves").on("connection", (socket) => {
+  socket.on("move", moveHandler);
 });
