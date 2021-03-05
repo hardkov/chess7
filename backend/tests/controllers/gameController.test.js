@@ -117,7 +117,13 @@ test("should response that is playing", () => {
 
   checkIfPlaying(req, res);
 
+  const data = res.json()._getData();
+  const game1 = game.findGameWithPlayer(user1FromGame1.username);
+
   expect(res.statusCode).toEqual(201);
+  expect(data.gameId).toEqual(game1.id);
+  expect(data.whitePlayerName).toEqual(user1FromGame1.username);
+  expect(data.blackPlayerName).toEqual(user2FromGame1.username);
 });
 
 test("should response that such user does not exist", () => {
