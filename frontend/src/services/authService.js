@@ -17,6 +17,7 @@ const loginUser = async (username, password) => {
       const user = { username: username, token: response.data.accessToken };
 
       saveUser(user);
+
       currentUserSubject.next(user);
 
       return true;
@@ -63,6 +64,22 @@ const isLoggedIn = () => {
   return currentUserValue() != null;
 };
 
+const getToken = () => {
+  if (isLoggedIn()) {
+    return currentUserValue().token;
+  }
+
+  return null;
+};
+
+const getUsername = () => {
+  if (isLoggedIn()) {
+    return currentUserValue().username;
+  }
+
+  return null;
+};
+
 export {
   loginUser,
   registerUser,
@@ -70,4 +87,6 @@ export {
   currentUserValue,
   currentUser,
   isLoggedIn,
+  getToken,
+  getUsername,
 };

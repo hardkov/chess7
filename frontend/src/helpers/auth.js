@@ -1,7 +1,7 @@
-import { currentUserValue } from "../services/authService";
+import { getToken } from "../services/authService";
 
 const authHeaders = () => {
-  const token = currentUserValue().token;
+  const token = getToken();
   return { Authorization: "Bearer " + token };
 };
 

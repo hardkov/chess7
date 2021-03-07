@@ -55,8 +55,7 @@ test("should validate data", () => {
   dataValidationMiddleware(socket, next);
   const userGame = game.findGameWithPlayer(user1FromGame1.username);
 
-  expect(socket.game).toEqual(userGame.gameClient);
-  expect(socket.gameId).toBe(userGame.id);
+  expect(socket.gameData).toEqual(userGame);
   expect(next).toHaveBeenCalledTimes(1);
   expect(next.mock.calls[0][0]).not.toBeDefined();
   expect(join).toHaveBeenCalledTimes(1);
@@ -72,8 +71,7 @@ test("should not validate data (requesting user does not exists)", () => {
 
   dataValidationMiddleware(socket, next);
 
-  expect(socket.game).not.toBeDefined();
-  expect(socket.gameId).not.toBeDefined();
+  expect(socket.gameData).not.toBeDefined();
   expect(next).toHaveBeenCalledTimes(1);
   expect(next.mock.calls[0][0]).toBeDefined();
   expect(join).not.toHaveBeenCalled();
@@ -88,24 +86,7 @@ test("should not validate data (a game is not being played)", () => {
 
   dataValidationMiddleware(socket, next);
 
-  expect(socket.game).not.toBeDefined();
-  expect(socket.gameId).not.toBeDefined();
-  expect(next).toHaveBeenCalledTimes(1);
-  expect(next.mock.calls[0][0]).toBeDefined();
-  expect(join).not.toHaveBeenCalled();
-});
-
-test("should not validate data (not his turn)", () => {
-  const userData = { username: notExistingUser.username };
-  const join = jest.fn();
-  const socket = { userData, join };
-
-  const next = jest.fn();
-
-  dataValidationMiddleware(socket, next);
-
-  expect(socket.game).not.toBeDefined();
-  expect(socket.gameId).not.toBeDefined();
+  expect(socket.gameData).not.toBeDefined();
   expect(next).toHaveBeenCalledTimes(1);
   expect(next.mock.calls[0][0]).toBeDefined();
   expect(join).not.toHaveBeenCalled();

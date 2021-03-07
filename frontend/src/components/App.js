@@ -2,7 +2,7 @@ import { createMuiTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 import React, { useEffect } from "react";
 import Routes from "./Routes";
 
-import { openConnection } from "../services/socket";
+import { closeConnection, openConnection } from "../services/userService";
 
 const defaultTheme = createMuiTheme({
   palette: {
@@ -43,6 +43,10 @@ console.log(defaultTheme == true);
 export default function App() {
   useEffect(() => {
     openConnection();
+
+    return () => {
+      closeConnection();
+    };
   }, []);
 
   return (

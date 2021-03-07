@@ -10,21 +10,16 @@ const actionTypes = {
 const reducer = (state, action) => {
   switch (action.type) {
     case actionTypes.credentialsChange:
-      state[action.value.field] = action.value.value;
-      return { ...state };
+      return { ...state, [action.value.field]: action.value.value };
     case actionTypes.registerFailure:
-      state.errorMessage = ERROR_MESSAGE;
-      state.isLoading = false;
-      return { ...state };
+      return { ...state, errorMessage: ERROR_MESSAGE, isLoading: false };
     case actionTypes.registerSuccess:
-      state.redirect = true;
-      state.isLoading = false;
-      return { ...state };
+      return { ...state, redirect: true, isLoading: false };
     case actionTypes.loading:
-      state.isLoading = true;
-      return { ...state };
+      return { ...state, isLoading: true };
     default:
-      console.log("No such action type");
+      console.log("unknown action");
+      return state;
   }
 };
 

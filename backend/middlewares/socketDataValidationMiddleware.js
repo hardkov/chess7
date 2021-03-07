@@ -16,16 +16,7 @@ const dataValidationMiddleware = (socket, next) => {
     return next(err);
   }
 
-  const userToMove =
-    game.gameClient.turn() == "w" ? game.whitePlayerName : game.blackPlayerName;
-
-  if (userToMove !== username) {
-    const err = new Error("Not your move");
-    return next(err);
-  }
-
-  socket.game = game.gameClient;
-  socket.gameId = game.id;
+  socket.gameData = game;
   socket.join(game.id);
 
   next();

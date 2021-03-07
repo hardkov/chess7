@@ -6,15 +6,12 @@ const userRouter = require("./routes/user.js");
 const gameRouter = require("./routes/game.js");
 const socketJWTMiddleware = require("./middlewares/socketJWTMIddleware");
 const dataValidationMiddleware = require("./middlewares/socketDataValidationMiddleware.js");
-const moveHandler = require("./eventHandlers/moveHandler");
 
 const port = process.env.PORT || 5000;
 const app = express();
 
 //tmp cors enabling
 const cors = require("cors");
-const { findGameWithPlayer } = require("./models/game");
-// const user = require("./routes/user.js");
 app.use(cors());
 
 // app.use(express.static(path.join(__dirname, '../frontend/build')));
@@ -32,8 +29,17 @@ const io = socketio(server, {
   },
 });
 
-io.of("/moves").use(socketJWTMiddleware);
-io.of("/moves").use(dataValidationMiddleware);
-io.of("/moves").on("connection", (socket) => {
+const moveNamespace = io.of("/moves");
+
+const { moveHandler } = require("./eventHandlers/moveHandler")(moveNamespace);
+
+moveNamespace.use(socketJWTMiddleware);
+moveNamespace.use(dataValidationMiddleware);
+moveNamespace.on("connection", (socket) => {
+  console.log("Move channel " + socket.id);
   socket.on("move", moveHandler);
+});
+
+io.on("connection", (socket) => {
+  console.log("Main channel " + socket.id);
 });
