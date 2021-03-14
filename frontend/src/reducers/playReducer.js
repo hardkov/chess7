@@ -1,18 +1,10 @@
-import Chess from "chess.js";
-
+import { gameStates, getGameState, moveTypes } from "../helpers/chess";
 import { getUsername } from "../services/authService";
 
 const actionTypes = {
   dataSetting: "DATA_SETTING",
   positionChange: "POSITION_CHANGE",
   loading: "LOADING",
-};
-
-const gameStates = {
-  draw: "DRAW",
-  whiteWin: "WHITE_WIN",
-  blackWin: "BLACK_WIN",
-  playing: "PLAYING",
 };
 
 const reducer = (state, action) => {
@@ -30,19 +22,7 @@ const reducer = (state, action) => {
 
     const position = gameData.fen;
 
-    const game = new Chess(position);
-
-    let gameState;
-    if (game.in_draw()) {
-      gameState = gameState.draw;
-    } else if (game.in_threefold_repetition()) {
-      gameState = gameState.draw;
-    } else if (game.in_checkmate()) {
-      gameState =
-        game.turn() === "b" ? gameStates.whiteWin : gameStates.blackWin;
-    } else {
-      gameState = gameStates.playing;
-    }
+    const gameState = getGameState(position);
 
     return {
       ...state,
@@ -55,22 +35,25 @@ const reducer = (state, action) => {
   }
 
   if (action.type === actionTypes.positionChange) {
-    const position = action.value.position;
-    const game = new Chess(position);
+    const moveData = action.value.moveData;
 
-    let gameState;
-    if (game.in_draw()) {
-      gameState = gameState.draw;
-    } else if (game.in_threefold_repetition()) {
-      gameState = gameState.draw;
-    } else if (game.in_checkmate()) {
-      gameState =
-        game.turn() === "b" ? gameStates.whiteWin : gameStates.blackWin;
-    } else {
-      gameState = gameStates.playing;
+    if (moveData.type === moveTypes.normal) {
+      const position = moveData.currentPosition;
+
+      const gameState = getGameState(position);
+
+      return { ...state, position: position, gameState: gameState };
+    } else if (moveData.type === moveTypes.special) {
+      const { move } = moveData;
+
+      if (move === moveTypes.surrender) {
+        const { winner } = moveData;
+        const gameState =
+          winner === "white" ? gameStates.whiteWin : gameStates.blackWin;
+
+        return { ...state, gameState: gameState };
+      }
     }
-
-    return { ...state, position: position, gameState: gameState };
   }
 
   if (action.type === actionTypes.loading) {
@@ -80,4 +63,4 @@ const reducer = (state, action) => {
   return state;
 };
 
-export { actionTypes, reducer, gameStates };
+export { actionTypes, reducer };

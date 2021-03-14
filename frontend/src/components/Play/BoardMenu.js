@@ -4,8 +4,15 @@ import Grid from "@material-ui/core/Grid";
 import Chessboard from "chessboardjsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import GamePanel from "../GamePanel";
+import GamePanel from "./GamePanel";
 import Animation from "../utils/Animation";
+import { surrender } from "../../services/gameService";
+import {
+  getGameTurn,
+  calcWidth,
+  gameStates,
+  moveTypes,
+} from "../../helpers/chess";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -27,31 +34,10 @@ const BoardMenu = ({
 }) => {
   const classes = useStyles();
 
-  const calcWidth = () => {
-    const chessboardContainer = document.getElementById("chessboardContainer");
-    const vwPixels = window.screen.width / 100;
-
-    if (chessboardContainer != null) {
-      const dynamicWidth = chessboardContainer.offsetWidth - vwPixels * 2;
-
-      return Math.min(dynamicWidth, 720);
+  const onActionClick = (action) => {
+    if (action === moveTypes.surrender) {
+      surrender();
     }
-  };
-
-  const onSurrenderClick = () => {
-    console.log("Surrender click");
-  };
-
-  const onRematchClick = () => {
-    console.log("Rematch click");
-  };
-
-  const onNewOpponentClick = () => {
-    console.log("New opponent click");
-  };
-
-  const onDrawClick = () => {
-    console.log("Draw click");
   };
 
   if (isLoading) return <CircularProgress className={classes.progress} />;
@@ -74,6 +60,10 @@ const BoardMenu = ({
             <Chessboard
               position={position}
               orientation={color}
+              draggable={
+                gameState === gameStates.playing &&
+                color === getGameTurn(position)
+              }
               onDrop={onDrop}
               calcWidth={calcWidth}
             />
@@ -82,10 +72,7 @@ const BoardMenu = ({
             <GamePanel
               enemy={enemy}
               gameState={gameState}
-              onSurrenderClick={onSurrenderClick}
-              onDrawClick={onDrawClick}
-              onRematchClick={onRematchClick}
-              onNewOpponentClick={onNewOpponentClick}
+              onActionClick={onActionClick}
             />
           </Grid>
         </Grid>

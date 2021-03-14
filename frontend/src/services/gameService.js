@@ -5,6 +5,7 @@ import { ReplaySubject } from "rxjs";
 import { CHALLANGE_ENDPOINT, IS_PLAYING_ENDPOINT } from "./config";
 import { authHeaders } from "../helpers/auth";
 import { getToken } from "../services/authService";
+import { moveTypes } from "../helpers/chess";
 
 let moveSocket;
 const positionSourceSubject = new ReplaySubject(1);
@@ -50,8 +51,8 @@ const openMoveConnection = () => {
     auth: { token },
   });
 
-  moveSocket.on("move", (data) => {
-    positionSourceSubject.next(data);
+  moveSocket.on("move", (moveData) => {
+    positionSourceSubject.next(moveData);
   });
 
   moveSocket.on("connect_error", (err) => {
@@ -73,6 +74,18 @@ const makeMove = (move) => {
   moveSocket.emit("move", move);
 };
 
+const offerDraw = () => {
+  moveSocket.emit("specialMove", "DRAW_OFFER");
+};
+
+const acceptDraw = () => {
+  moveSocket.emit("specialMove", "DRAW_ACCEPT");
+};
+
+const surrender = () => {
+  moveSocket.emit("specialMove", moveTypes.surrender);
+};
+
 export {
   positionSource,
   openMoveConnection,
@@ -80,4 +93,7 @@ export {
   makeMove,
   challangePlayer,
   checkIfIsPlaying,
+  offerDraw,
+  acceptDraw,
+  surrender,
 };

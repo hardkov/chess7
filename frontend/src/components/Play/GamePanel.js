@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import { currentUserValue } from "../services/authService";
-import { gameStates } from "../reducers/playReducer";
+import { currentUserValue } from "../../services/authService";
+import useGameMenu from "../../hooks/useGameMenu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,38 +18,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function GamePanel({
-  enemy,
-  gameState,
-  onSurrenderClick,
-  onDrawClick,
-  onRematchClick,
-  onNewOpponentClick,
-}) {
+export default function GamePanel({ enemy, gameState, onActionClick }) {
   const classes = useStyles();
-  const [gameStateMessage, setGameStateMessage] = useState("");
-  const [buttons, setButtons] = useState([]);
-
-  useEffect(() => {
-    if (gameState == gameStates.playing) {
-      setButtons([
-        { text: "Surrender", onClick: onSurrenderClick },
-        { text: "Draw", onClick: onDrawClick },
-      ]);
-    } else {
-      setButtons([
-        { text: "Rematch", onClick: onRematchClick },
-        { text: "New opponent", onClick: onNewOpponentClick },
-      ]);
-      if (gameState == gameStates.whiteWin) {
-        setGameStateMessage("White is Victorious");
-      } else if (gameState == gameStates.blackWin) {
-        setGameStateMessage("Black is Victorious");
-      } else if (gameState == gameStates.draw) {
-        setGameStateMessage("Draw");
-      }
-    }
-  }, [gameState]);
+  const [buttons, gameStateMessage] = useGameMenu(gameState, onActionClick);
 
   return (
     <div className={classes.root}>
@@ -74,7 +45,7 @@ export default function GamePanel({
             variant="contained"
           >
             {buttons.map(({ text, onClick }, idx) => (
-              <Button key={idx} onClick={() => onClick}>
+              <Button key={idx} onClick={onClick}>
                 {text}
               </Button>
             ))}
