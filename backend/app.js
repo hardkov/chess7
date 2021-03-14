@@ -32,12 +32,16 @@ const io = socketio(server, {
 const moveNamespace = io.of("/moves");
 
 const { moveHandler } = require("./eventHandlers/moveHandler")(moveNamespace);
+const { specialMoveHandler } = require("./eventHandlers/specialMoveHandler")(
+  moveNamespace
+);
 
 moveNamespace.use(socketJWTMiddleware);
 moveNamespace.use(dataValidationMiddleware);
 moveNamespace.on("connection", (socket) => {
   console.log("Move channel " + socket.id);
   socket.on("move", moveHandler);
+  socket.on("specialMove", specialMoveHandler);
 });
 
 io.on("connection", (socket) => {

@@ -1,4 +1,5 @@
 const { removeGame } = require("../models/game");
+const moveTypes = require("./moveTypes");
 
 module.exports = (io) => {
   const moveHandler = function (move) {
@@ -16,6 +17,7 @@ module.exports = (io) => {
 
     if (userToMove !== username) {
       socket.emit("move", {
+        type: moveTypes.normal,
         success: false,
         err: "not your move",
         currentPosition: gameClient.fen(),
@@ -27,6 +29,7 @@ module.exports = (io) => {
 
     if (moveConfirmation == null) {
       socket.emit("move", {
+        type: moveTypes.normal,
         success: false,
         err: "invalid move",
         currentPosition: gameClient.fen(),
@@ -35,6 +38,7 @@ module.exports = (io) => {
     }
 
     io.to(id).emit("move", {
+      type: moveTypes.normal,
       success: true,
       currentPosition: gameClient.fen(),
     });
