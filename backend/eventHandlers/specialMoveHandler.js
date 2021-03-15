@@ -4,7 +4,7 @@ const { removeGame } = require("../models/game");
 module.exports = (io) => {
   const specialMoveHandler = function (move) {
     const socket = this;
-    const { gameClient, id, whitePlayerName } = socket.gameData;
+    const { id, whitePlayerName } = socket.gameData;
     const { username } = socket.userData;
 
     if (move === moveTypes.surrender) {
@@ -23,56 +23,36 @@ module.exports = (io) => {
         const clientSocket = io.sockets.get(clientId);
         clientSocket.disconnect(true);
       }
-    }
+    } else if (move === moveTypes.drawOffer) {
+      socket.gameData.drawOfferedBy = username;
 
-    return;
+      io.to(id).emit("move", {
+        type: moveTypes.special,
+        move: moveTypes.drawOffer,
+        sender: username,
+      });
+    } else if (move === moveTypes.drawAccept) {
+      const { drawOfferedBy } = socket.gameData;
 
-    ///
-    io.to(id).emit("move", {
-      type: moveTypes.special,
-      move: moveTypes.drawOffer,
-      from: username,
-    });
+      if (drawOfferedBy !== username) {
+        io.to(id).emit("move", {
+          type: moveTypes.special,
+          move: moveTypes.drawAccept,
+        });
+        const clients = io.adapter.rooms.get(id);
+        removeGame(id);
 
-    io.to(id).emit("move", {
-      type: moveTypes.special,
-      move: moveTypes.drawAccept,
-      from: username,
-    });
-
-    if (gameClient.game_over()) {
-      const clients = io.adapter.rooms.get(id);
-      removeGame(id);
-
-      for (let clientId of clients) {
-        const clientSocket = io.sockets.get(clientId);
-        clientSocket.disconnect(true);
+        for (let clientId of clients) {
+          const clientSocket = io.sockets.get(clientId);
+          clientSocket.disconnect(true);
+        }
       }
+    } else if (move === moveTypes.drawDecline) {
+      io.to(id).emit("move", {
+        type: moveTypes.special,
+        move: moveTypes.drawDecline,
+      });
     }
-    // Surrender, Draw offer, Draw accept
-
-    // const userToMove =
-    //   gameClient.turn() == "w" ? whitePlayerName : blackPlayerName;
-
-    // if (userToMove !== username) {
-    //   socket.emit("specialMoves", {
-    //     success: false,
-    //     err: "not your move",
-    //     currentPosition: gameClient.fen(),
-    //   });
-    //   return;
-    // }
-
-    // const moveConfirmation = gameClient.move(move);
-
-    // if (moveConfirmation == null) {
-    //   socket.emit("move", {
-    //     success: false,
-    //     err: "invalid move",
-    //     currentPosition: gameClient.fen(),
-    //   });
-    //   return;
-    // }
   };
 
   return { specialMoveHandler };
