@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Chessboard from "chessboardjsx";
@@ -8,6 +8,7 @@ import GamePanel from "./GamePanel";
 import Animation from "../utils/Animation";
 import {
   acceptDraw,
+  challangePlayer,
   declineDraw,
   offerDraw,
   surrender,
@@ -18,6 +19,7 @@ import {
   gameStates,
   actionTypes,
 } from "../../helpers/chess";
+import { Redirect } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,8 +41,9 @@ const BoardMenu = ({
   gameState,
 }) => {
   const classes = useStyles();
+  const [redirect, setRedirect] = useState(null);
 
-  const onActionClick = (action) => {
+  const onActionClick = async (action) => {
     if (action === actionTypes.surrender) {
       surrender();
     } else if (action === actionTypes.drawOffer) {
@@ -49,8 +52,18 @@ const BoardMenu = ({
       acceptDraw();
     } else if (action === actionTypes.drawDecline) {
       declineDraw();
+    } else if (action === actionTypes.newOpponent) {
+      setRedirect("/");
+    } else if (action === actionTypes.rematch) {
+      const isChallanged = await challangePlayer(enemy);
+
+      if (isChallanged) {
+        setRedirect("/");
+      }
     }
   };
+
+  if (redirect != null) return <Redirect to={redirect} />;
 
   if (isLoading) return <CircularProgress className={classes.progress} />;
 
