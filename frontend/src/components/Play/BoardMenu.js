@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Chessboard from "chessboardjsx";
@@ -6,20 +6,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import GamePanel from "./GamePanel";
 import Animation from "../utils/Animation";
-import {
-  acceptDraw,
-  challangePlayer,
-  declineDraw,
-  offerDraw,
-  surrender,
-} from "../../services/gameService";
-import {
-  getGameTurn,
-  calcWidth,
-  gameStates,
-  actionTypes,
-} from "../../helpers/chess";
+import { getGameTurn, calcWidth, gameStates } from "../../helpers/chess";
 import { Redirect } from "react-router";
+import { useActionExecutor } from "../../hooks/useActionExecutor";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,27 +30,7 @@ const BoardMenu = ({
   gameState,
 }) => {
   const classes = useStyles();
-  const [redirect, setRedirect] = useState(null);
-
-  const onActionClick = async (action) => {
-    if (action === actionTypes.surrender) {
-      surrender();
-    } else if (action === actionTypes.drawOffer) {
-      offerDraw();
-    } else if (action === actionTypes.drawAccept) {
-      acceptDraw();
-    } else if (action === actionTypes.drawDecline) {
-      declineDraw();
-    } else if (action === actionTypes.newOpponent) {
-      setRedirect("/");
-    } else if (action === actionTypes.rematch) {
-      const isChallanged = await challangePlayer(enemy);
-
-      if (isChallanged) {
-        setRedirect("/");
-      }
-    }
-  };
+  const [redirect, onActionClick] = useActionExecutor(enemy);
 
   if (redirect != null) return <Redirect to={redirect} />;
 
