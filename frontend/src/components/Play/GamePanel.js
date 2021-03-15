@@ -18,9 +18,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function GamePanel({ enemy, gameState, onActionClick }) {
+export default function GamePanel({
+  enemy,
+  gameState,
+  onActionClick,
+  drawOfferedBy,
+}) {
   const classes = useStyles();
-  const [buttons, gameStateMessage] = useGameMenu(gameState, onActionClick);
+  const [buttons, gameStateMessage] = useGameMenu(
+    gameState,
+    onActionClick,
+    drawOfferedBy
+  );
 
   return (
     <div className={classes.root}>

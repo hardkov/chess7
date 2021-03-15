@@ -75,11 +75,15 @@ const makeMove = (move) => {
 };
 
 const offerDraw = () => {
-  moveSocket.emit("specialMove", "DRAW_OFFER");
+  moveSocket.emit("specialMove", moveTypes.drawOffer);
 };
 
 const acceptDraw = () => {
-  moveSocket.emit("specialMove", "DRAW_ACCEPT");
+  moveSocket.emit("specialMove", moveTypes.drawAccept);
+};
+
+const declineDraw = () => {
+  moveSocket.emit("specialMove", moveTypes.drawDecline);
 };
 
 const surrender = () => {
@@ -95,5 +99,6 @@ export {
   checkIfIsPlaying,
   offerDraw,
   acceptDraw,
+  declineDraw,
   surrender,
 };

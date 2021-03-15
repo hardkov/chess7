@@ -10,9 +10,19 @@ const gameStates = {
 const moveTypes = {
   drawOffer: "DRAW_OFFER",
   drawAccept: "DRAW_ACCEPT",
+  drawDecline: "DRAW_DECLINE",
   surrender: "SURRENDER",
   special: "SPECIAL",
   normal: "NORMAL",
+};
+
+const actionTypes = {
+  drawOffer: "DRAW_OFFER",
+  drawAccept: "DRAW_ACCEPT",
+  drawDecline: "DRAW_DECLINE",
+  surrender: "SURRENDER",
+  rematch: "REMATCH",
+  newOpponent: "NEW_OPPONENT",
 };
 
 const validateMove = (sourceSquare, targetSquare, position) => {
@@ -64,6 +74,7 @@ const calcWidth = () => {
 export {
   gameStates,
   moveTypes,
+  actionTypes,
   validateMove,
   getGameState,
   getGameTurn,

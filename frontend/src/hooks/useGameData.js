@@ -13,6 +13,7 @@ const initialState = {
   enemy: null,
   color: null,
   position: null,
+  drawOfferedBy: null,
   isLoading: false,
   gameState: gameStates.playing,
 };

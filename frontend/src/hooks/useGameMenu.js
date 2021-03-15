@@ -1,36 +1,62 @@
 import { useEffect, useState } from "react";
-import { gameStates, moveTypes } from "../helpers/chess";
+import { gameStates, actionTypes } from "../helpers/chess";
+import { getUsername } from "../services/authService";
 
-const useGameMenu = (gameState, onActionClick) => {
+const useGameMenu = (gameState, onActionClick, drawOfferedBy) => {
   const [gameStateMessage, setGameStateMessage] = useState("");
   const [buttons, setButtons] = useState([]);
 
   useEffect(() => {
+    let buttons;
+    let gameStateMessage;
+
     if (gameState == gameStates.playing) {
-      setButtons([
+      if (drawOfferedBy != null && drawOfferedBy != getUsername()) {
+        gameStateMessage = "Enemy offered a draw";
+        buttons = [
+          {
+            text: "Surrender",
+            onClick: () => onActionClick(actionTypes.surrender),
+          },
+          {
+            text: "Accept draw",
+            onClick: () => onActionClick(actionTypes.drawAccept),
+          },
+          {
+            text: "Decline draw",
+            onClick: () => onActionClick(actionTypes.drawDecline),
+          },
+        ];
+      } else {
+        buttons = [
+          {
+            text: "Surrender",
+            onClick: () => onActionClick(actionTypes.surrender),
+          },
+          { text: "Draw", onClick: () => onActionClick(actionTypes.drawOffer) },
+        ];
+      }
+    } else {
+      buttons = [
+        { text: "Rematch", onClick: () => onActionClick(actionTypes.rematch) },
         {
-          text: "Surrender",
-          onClick: () => onActionClick(moveTypes.surrender),
+          text: "New opponent",
+          onClick: () => onActionClick(actionTypes.newOpponent),
         },
-        { text: "Draw", onClick: () => onActionClick(moveTypes.drawOffer) },
-      ]);
+      ];
 
-      return;
+      if (gameState == gameStates.whiteWin) {
+        gameStateMessage = "White is Victorious";
+      } else if (gameState == gameStates.blackWin) {
+        gameStateMessage = "Black is Victorious";
+      } else if (gameState == gameStates.draw) {
+        gameStateMessage = "Draw";
+      }
     }
 
-    setButtons([
-      { text: "Rematch", onClick: () => onActionClick("REMATCH") },
-      { text: "New opponent", onClick: () => onActionClick("NEW_OPPONENT") },
-    ]);
-
-    if (gameState == gameStates.whiteWin) {
-      setGameStateMessage("White is Victorious");
-    } else if (gameState == gameStates.blackWin) {
-      setGameStateMessage("Black is Victorious");
-    } else if (gameState == gameStates.draw) {
-      setGameStateMessage("Draw");
-    }
-  }, [gameState]);
+    setButtons(buttons);
+    setGameStateMessage(gameStateMessage);
+  }, [gameState, drawOfferedBy]);
 
   return [buttons, gameStateMessage];
 };

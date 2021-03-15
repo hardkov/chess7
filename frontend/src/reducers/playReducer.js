@@ -52,6 +52,14 @@ const reducer = (state, action) => {
           winner === "white" ? gameStates.whiteWin : gameStates.blackWin;
 
         return { ...state, gameState: gameState };
+      } else if (move === moveTypes.drawOffer) {
+        const { sender } = moveData;
+
+        return { ...state, drawOfferedBy: sender };
+      } else if (move === moveTypes.drawAccept) {
+        return { ...state, gameState: gameStates.draw };
+      } else if (move === moveTypes.drawDecline) {
+        return { ...state, drawOfferedBy: null };
       }
     }
   }

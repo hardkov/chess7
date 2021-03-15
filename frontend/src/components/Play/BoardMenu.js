@@ -6,12 +6,17 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import GamePanel from "./GamePanel";
 import Animation from "../utils/Animation";
-import { surrender } from "../../services/gameService";
+import {
+  acceptDraw,
+  declineDraw,
+  offerDraw,
+  surrender,
+} from "../../services/gameService";
 import {
   getGameTurn,
   calcWidth,
   gameStates,
-  moveTypes,
+  actionTypes,
 } from "../../helpers/chess";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +33,7 @@ const BoardMenu = ({
   position,
   color,
   enemy,
+  drawOfferedBy,
   onDrop,
   isLoading,
   gameState,
@@ -35,8 +41,14 @@ const BoardMenu = ({
   const classes = useStyles();
 
   const onActionClick = (action) => {
-    if (action === moveTypes.surrender) {
+    if (action === actionTypes.surrender) {
       surrender();
+    } else if (action === actionTypes.drawOffer) {
+      offerDraw();
+    } else if (action === actionTypes.drawAccept) {
+      acceptDraw();
+    } else if (action === actionTypes.drawDecline) {
+      declineDraw();
     }
   };
 
@@ -72,6 +84,7 @@ const BoardMenu = ({
             <GamePanel
               enemy={enemy}
               gameState={gameState}
+              drawOfferedBy={drawOfferedBy}
               onActionClick={onActionClick}
             />
           </Grid>
