@@ -7,17 +7,23 @@ const useGameMenu = (gameState, onActionClick, drawOfferedBy) => {
   const [buttons, setButtons] = useState([]);
 
   useEffect(() => {
-    let buttons;
+    let buttons = [
+      {
+        text: "Surrender",
+        onClick: () => onActionClick(actionTypes.surrender),
+      },
+    ];
     let gameStateMessage;
 
     if (gameState == gameStates.playing) {
-      if (drawOfferedBy != null && drawOfferedBy != getUsername()) {
+      if (drawOfferedBy == null) {
+        buttons.push({
+          text: "Draw",
+          onClick: () => onActionClick(actionTypes.drawOffer),
+        });
+      } else if (drawOfferedBy != getUsername()) {
         gameStateMessage = "Enemy offered a draw";
-        buttons = [
-          {
-            text: "Surrender",
-            onClick: () => onActionClick(actionTypes.surrender),
-          },
+        buttons.push(
           {
             text: "Accept draw",
             onClick: () => onActionClick(actionTypes.drawAccept),
@@ -25,16 +31,10 @@ const useGameMenu = (gameState, onActionClick, drawOfferedBy) => {
           {
             text: "Decline draw",
             onClick: () => onActionClick(actionTypes.drawDecline),
-          },
-        ];
+          }
+        );
       } else {
-        buttons = [
-          {
-            text: "Surrender",
-            onClick: () => onActionClick(actionTypes.surrender),
-          },
-          { text: "Draw", onClick: () => onActionClick(actionTypes.drawOffer) },
-        ];
+        gameStateMessage = "You offered a draw";
       }
     } else {
       buttons = [

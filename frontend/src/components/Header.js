@@ -1,21 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
-  Button,
   Typography,
   IconButton,
+  Button,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Animation from "./utils/Animation";
-import {
-  currentUserValue,
-  currentUser,
-  isLoggedIn,
-} from "../services/authService";
+import useHeader from "../hooks/useHeader";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,45 +34,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header() {
-  const [user, setUser] = useState(currentUserValue());
   const classes = useStyles();
-  const subscribtionRef = useRef(null);
-
-  useEffect(() => {
-    subscribtionRef.current = currentUser().subscribe((user) => setUser(user));
-
-    return () => {
-      if (subscribtionRef.current) {
-        subscribtionRef.current.unsubscribe();
-      }
-    };
-  }, []);
-
-  const accessGained = isLoggedIn();
-
-  const loggedInLinks = [
-    { to: "/play", name: "PLAY" },
-    { to: "/logout", name: "LOGOUT" },
-  ];
-
-  const notLoggedInLinks = [
-    { to: "/login", name: "LOGIN" },
-    { to: "/register", name: "REGISTER" },
-  ];
-
-  const buttonLinks = accessGained ? loggedInLinks : notLoggedInLinks;
-  const buttonLinkComponents = buttonLinks.map((link, idx) => (
-    <Button
-      key={idx}
-      className={classes.button}
-      variant="contained"
-      color="secondary"
-      component={RouterLink}
-      to={link.to}
-    >
-      {link.name}
-    </Button>
-  ));
+  const [user, buttons, accessGained] = useHeader();
 
   return (
     <div className={classes.root}>
@@ -86,7 +45,20 @@ export default function Header() {
             <HomeIcon />
           </IconButton>
           <div className={classes.buttonContainer}>
-            <Animation onRender>{buttonLinkComponents}</Animation>
+            <Animation onRender>
+              {buttons.map((link, idx) => (
+                <Button
+                  key={idx}
+                  className={classes.button}
+                  variant="contained"
+                  color="secondary"
+                  component={RouterLink}
+                  to={link.to}
+                >
+                  {link.name}
+                </Button>
+              ))}
+            </Animation>
           </div>
           {accessGained && (
             <Typography

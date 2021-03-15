@@ -73,15 +73,9 @@ const BoardMenu = ({
   return (
     <Animation onMount>
       <div className={classes.paper}>
-        <Grid
-          container
-          spacing={3}
-          direction="row"
-          justify="center"
-          alignItems="stretch"
-        >
+        <Grid container direction="row" justify="center" alignItems="stretch">
           <Grid item xs={3}></Grid>
-          <Grid item id="chessboardContainer" xs={6}>
+          <Grid item id="chessboardContainer" xs={5}>
             <Chessboard
               position={position}
               orientation={color}
