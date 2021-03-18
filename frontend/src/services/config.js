@@ -7,6 +7,15 @@ const REGISTER_ENDPOINT = "user/register";
 const USER_LIST_ENDPOINT = "user/list";
 const CHALLANGE_ENDPOINT = "game/start";
 const IS_PLAYING_ENDPOINT = "game/playing";
+const GAME_LIST_ENDPOINT = "game/list";
+
+const SOCKET_BASE_URL = "ws://localhost:5000";
+const SOCKET_MOVE_ENDPOINT = SOCKET_BASE_URL + "/moves";
+
+const socketEvents = {
+  move: "move",
+  specialMove: "specialMove",
+};
 
 export {
   LOGIN_ENDPOINT,
@@ -14,4 +23,8 @@ export {
   USER_LIST_ENDPOINT,
   CHALLANGE_ENDPOINT,
   IS_PLAYING_ENDPOINT,
+  GAME_LIST_ENDPOINT,
+  SOCKET_BASE_URL,
+  SOCKET_MOVE_ENDPOINT,
+  socketEvents,
 };

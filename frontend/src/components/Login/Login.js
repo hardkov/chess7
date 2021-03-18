@@ -2,7 +2,8 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import LoginForm from "./LoginForm";
-import useLoginForm from "../../hooks/useLoginForm";
+import useForm from "../../hooks/useForm";
+import { loginUser } from "../../services/authService";
 
 const Login = () => {
   const [
@@ -11,7 +12,7 @@ const Login = () => {
     redirect,
     handleCredentialsChange,
     handleSubmit,
-  ] = useLoginForm();
+  ] = useForm(loginUser, { username: "", password: "" });
 
   if (redirect) return <Redirect to="/" />;
 

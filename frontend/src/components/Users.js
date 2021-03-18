@@ -63,18 +63,6 @@ export default function Users() {
                   Challange
                 </Button>
               </TableCell>
-              <TableCell>
-                <Button
-                  size="small"
-                  orientation="vertical"
-                  color="secondary"
-                  aria-label="vertical outlined primary button group"
-                  variant="contained"
-                  onClick={() => console.log("Profile button clicked")}
-                >
-                  Profile
-                </Button>
-              </TableCell>
             </TableRow>
           ))}
         </TableBody>

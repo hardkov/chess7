@@ -1,8 +1,8 @@
 import React from "react";
 
 import BoardMenu from "./BoardMenu";
-import useGameData from "../../hooks/useGameData.js";
-import useOnDrop from "../../hooks/useOnDrop";
+import useGameData from "../hooks/useGameData.js";
+import useOnDrop from "../hooks/useOnDrop";
 
 export default function Play() {
   const [gameData, dispatch] = useGameData();

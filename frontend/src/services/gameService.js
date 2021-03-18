@@ -2,7 +2,13 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { ReplaySubject } from "rxjs";
 
-import { CHALLANGE_ENDPOINT, IS_PLAYING_ENDPOINT } from "./config";
+import {
+  CHALLANGE_ENDPOINT,
+  GAME_LIST_ENDPOINT,
+  IS_PLAYING_ENDPOINT,
+  SOCKET_MOVE_ENDPOINT,
+  socketEvents,
+} from "./config";
 import { authHeaders } from "../helpers/auth";
 import { getToken } from "../services/authService";
 import { moveTypes } from "../helpers/chess";
@@ -40,6 +46,16 @@ const checkIfIsPlaying = async () => {
   }
 };
 
+const getGameList = async () => {
+  try {
+    const response = await axios.get(GAME_LIST_ENDPOINT);
+
+    if (response.status === 200) return response.data.gameList;
+  } catch (err) {
+    return [];
+  }
+};
+
 const positionSource = () => {
   return positionSourceSubject.asObservable();
 };
@@ -47,11 +63,11 @@ const positionSource = () => {
 const openMoveConnection = () => {
   const token = getToken();
 
-  moveSocket = io.connect("ws://localhost:5000/moves", {
+  moveSocket = io.connect(SOCKET_MOVE_ENDPOINT, {
     auth: { token },
   });
 
-  moveSocket.on("move", (moveData) => {
+  moveSocket.on(socketEvents.move, (moveData) => {
     positionSourceSubject.next(moveData);
   });
 
@@ -71,23 +87,23 @@ const closeMoveConnection = () => {
 };
 
 const makeMove = (move) => {
-  moveSocket.emit("move", move);
+  moveSocket.emit(socketEvents.move, move);
 };
 
 const offerDraw = () => {
-  moveSocket.emit("specialMove", moveTypes.drawOffer);
+  moveSocket.emit(socketEvents.specialMove, moveTypes.drawOffer);
 };
 
 const acceptDraw = () => {
-  moveSocket.emit("specialMove", moveTypes.drawAccept);
+  moveSocket.emit(socketEvents.specialMove, moveTypes.drawAccept);
 };
 
 const declineDraw = () => {
-  moveSocket.emit("specialMove", moveTypes.drawDecline);
+  moveSocket.emit(socketEvents.specialMove, moveTypes.drawDecline);
 };
 
 const surrender = () => {
-  moveSocket.emit("specialMove", moveTypes.surrender);
+  moveSocket.emit(socketEvents.specialMove, moveTypes.surrender);
 };
 
 export {
@@ -97,6 +113,7 @@ export {
   makeMove,
   challangePlayer,
   checkIfIsPlaying,
+  getGameList,
   offerDraw,
   acceptDraw,
   declineDraw,

@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 
-import CurrentGames from "./CurrentGames";
+import Games from "./Games";
 import Users from "./Users";
 import Animation from "./utils/Animation";
 
@@ -20,7 +20,7 @@ export default function Home() {
             <Users />
           </Grid>
           <Grid item xs={5}>
-            <CurrentGames />
+            <Games />
           </Grid>
           <Grid item xs={3}></Grid>
         </Grid>

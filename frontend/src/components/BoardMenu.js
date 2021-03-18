@@ -5,10 +5,10 @@ import Chessboard from "chessboardjsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import GamePanel from "./GamePanel";
-import Animation from "../utils/Animation";
-import { getGameTurn, calcWidth, gameStates } from "../../helpers/chess";
+import Animation from "./utils/Animation";
+import { getGameTurn, calcWidth, gameStates } from "../helpers/chess";
 import { Redirect } from "react-router";
-import { useActionExecutor } from "../../hooks/useActionExecutor";
+import { useActionExecutor } from "../hooks/useActionExecutor";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

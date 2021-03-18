@@ -31,6 +31,7 @@ const reducer = (state, action) => {
       position: position,
       isLoading: false,
       gameState: gameState,
+      drawOfferedBy: gameData.drawOfferedBy,
     };
   }
 
@@ -40,22 +41,21 @@ const reducer = (state, action) => {
     if (moveData.type === moveTypes.normal) {
       const position = moveData.currentPosition;
 
-      const gameState = getGameState(position);
+      const gameState = getGameState(moveData.currentPosition);
 
       return { ...state, position: position, gameState: gameState };
     } else if (moveData.type === moveTypes.special) {
       const { move } = moveData;
 
       if (move === moveTypes.surrender) {
-        const { winner } = moveData;
         const gameState =
-          winner === "white" ? gameStates.whiteWin : gameStates.blackWin;
+          moveData.winner === "white"
+            ? gameStates.whiteWin
+            : gameStates.blackWin;
 
         return { ...state, gameState: gameState };
       } else if (move === moveTypes.drawOffer) {
-        const { sender } = moveData;
-
-        return { ...state, drawOfferedBy: sender };
+        return { ...state, drawOfferedBy: moveData.sender };
       } else if (move === moveTypes.drawAccept) {
         return { ...state, gameState: gameStates.draw };
       } else if (move === moveTypes.drawDecline) {

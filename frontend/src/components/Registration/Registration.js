@@ -1,7 +1,8 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import useRegistrationForm from "../../hooks/useRegistrationForm";
 
+import { registerUser } from "../../services/authService";
+import useForm from "../../hooks/useForm";
 import RegistrationForm from "./RegistrationForm";
 
 const Registration = () => {
@@ -11,7 +12,7 @@ const Registration = () => {
     redirect,
     handleCredentialsChange,
     handleSubmit,
-  ] = useRegistrationForm();
+  ] = useForm(registerUser, { username: "", password: "" });
 
   if (redirect) return <Redirect to="/" />;
 

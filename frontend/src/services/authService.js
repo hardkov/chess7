@@ -6,7 +6,7 @@ import { LOGIN_ENDPOINT, REGISTER_ENDPOINT } from "./config";
 
 const currentUserSubject = new BehaviorSubject(getUser());
 
-const loginUser = async (username, password) => {
+const loginUser = async ({ username, password }) => {
   try {
     const response = await axios.post(LOGIN_ENDPOINT, {
       username: username,
@@ -20,14 +20,14 @@ const loginUser = async (username, password) => {
 
       currentUserSubject.next(user);
 
-      return true;
+      return { success: true };
     }
   } catch (error) {
-    return false;
+    return { success: false, error: error.response.data.errors[0] };
   }
 };
 
-const registerUser = async (username, password) => {
+const registerUser = async ({ username, password }) => {
   try {
     const response = await axios.post(REGISTER_ENDPOINT, {
       username: username,
@@ -40,10 +40,10 @@ const registerUser = async (username, password) => {
       saveUser(user);
       currentUserSubject.next(user);
 
-      return true;
+      return { success: true };
     }
   } catch (error) {
-    return false;
+    return { success: false, error: error.response.data.errors[0] };
   }
 };
 
