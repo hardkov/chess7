@@ -31,9 +31,10 @@ const io = socketio(server, {
 
 const moveNamespace = io.of("/moves");
 
-const { moveHandler } = require("./eventHandlers/moveHandler")(moveNamespace);
-const { specialMoveHandler } = require("./eventHandlers/specialMoveHandler")(
-  moveNamespace
+const { moveHandler } = require("./handlers/moveHandler")(moveNamespace, io);
+const { specialMoveHandler } = require("./handlers/specialMoveHandler")(
+  moveNamespace,
+  io
 );
 
 moveNamespace.use(socketJWTMiddleware);

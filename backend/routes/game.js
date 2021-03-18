@@ -9,11 +9,8 @@ const jsonParser = bodyParser.json();
 
 router.post("/start", JWTMiddleware, jsonParser, gameController.startGame);
 
-router.get(
-  "/playing",
-  JWTMiddleware,
-  jsonParser,
-  gameController.checkIfPlaying
-);
+router.get("/playing", JWTMiddleware, gameController.checkIfPlaying);
+
+router.get("/list", gameController.getGameList);
 
 module.exports = router;

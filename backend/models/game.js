@@ -32,6 +32,14 @@ function getAll() {
   return games;
 }
 
+function update(game) {
+  for (let i = 0; i < games.length; i++) {
+    if (game.id == games[i].id) {
+      games[i] = game;
+    }
+  }
+}
+
 function removeGame(gameId) {
   games = games.filter((game) => game.id !== gameId);
 }
@@ -45,6 +53,7 @@ module.exports = {
   get,
   findGameWithPlayer,
   getAll,
+  update,
   removeGame,
   removeAll,
 };

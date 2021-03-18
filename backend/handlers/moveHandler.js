@@ -1,7 +1,6 @@
-const { removeGame } = require("../models/game");
-const moveTypes = require("./moveTypes");
+const { moveTypes, finishGame } = require("./helpers");
 
-module.exports = (io) => {
+module.exports = (moveNamespace, io) => {
   const moveHandler = function (move) {
     const socket = this;
     const {
@@ -37,20 +36,19 @@ module.exports = (io) => {
       return;
     }
 
-    io.to(id).emit("move", {
+    moveNamespace.to(id).emit("move", {
       type: moveTypes.normal,
       success: true,
       currentPosition: gameClient.fen(),
     });
 
-    if (gameClient.game_over()) {
-      const clients = io.adapter.rooms.get(id);
-      removeGame(id);
+    io.emit("liveGames", {
+      id,
+      currentPosition: gameClient.fen(),
+    });
 
-      for (let clientId of clients) {
-        const clientSocket = io.sockets.get(clientId);
-        clientSocket.disconnect(true);
-      }
+    if (gameClient.game_over()) {
+      finishGame(id, io, moveNamespace);
     }
   };
 
