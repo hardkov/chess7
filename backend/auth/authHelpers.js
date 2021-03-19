@@ -30,6 +30,8 @@ function generatePasswordHash(password) {
 }
 
 function validatePassword(passwordProvided, passwordHash) {
+  if (typeof passwordProvided != "string") return false;
+
   const passwordFields = passwordHash.split("$");
   const salt = passwordFields[0];
 

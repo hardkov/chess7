@@ -3,6 +3,13 @@ const { get } = require("../models/user");
 const validateCredentialsMiddleware = (req, res, next) => {
   const { username, password } = req.body;
 
+  if (username == null) {
+    return res.status(400).send({ errors: ["No username"] });
+  }
+
+  if (password == null) {
+    return res.status(400).send({ errors: ["No password"] });
+  }
   if (username.length < 8) {
     return res.status(400).send({ errors: ["Too short username"] });
   }

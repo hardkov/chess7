@@ -15,13 +15,17 @@ beforeEach(() => {
   removeAll();
 });
 
+afterEach(() => {
+  removeAll();
+});
+
 test("should validate credentials", () => {
   const id = add(user);
 
   const req = httpMocks.createRequest({
     body: {
       username: user.username,
-      password: password,
+      password,
     },
   });
   const res = httpMocks.createResponse();
@@ -35,17 +39,10 @@ test("should validate credentials", () => {
 });
 
 test("should not validate credentials(requesting user does not exists)", () => {
-  const password = "superpassword";
-  const passwordHash = generatePasswordHash(password);
-  const user = {
-    username: "Adrian",
-    passwordHash,
-  };
-
   const req = httpMocks.createRequest({
     body: {
       username: user.username,
-      password: password,
+      password,
     },
   });
   const res = httpMocks.createResponse();
@@ -59,13 +56,7 @@ test("should not validate credentials(requesting user does not exists)", () => {
 });
 
 test("should not validate credentials(wrong password)", () => {
-  const password = "superpassword";
-  const passwordHash = generatePasswordHash(password);
-  const user = {
-    username: "Adrian",
-    passwordHash,
-  };
-  const id = add(user);
+  add(user);
 
   const req = httpMocks.createRequest({
     body: {
@@ -81,4 +72,40 @@ test("should not validate credentials(wrong password)", () => {
   expect(next).not.toBeCalled();
   expect(req.body.id).not.toBeDefined();
   expect(res.statusCode).toEqual(400);
+});
+
+test("should not validate credentials(no password)", () => {
+  add(user);
+
+  const req = httpMocks.createRequest({
+    body: {
+      username: user.username,
+    },
+  });
+  const res = httpMocks.createResponse();
+  const next = jest.fn();
+
+  checkCredentials(req, res, next);
+
+  expect(next).not.toBeCalled();
+  expect(req.body.id).not.toBeDefined();
+  expect(res.statusCode).toEqual(400);
+});
+
+test("should not validate credentials(no username)", () => {
+  add(user);
+
+  const req = httpMocks.createRequest({
+    body: {
+      password,
+    },
+  });
+  const res = httpMocks.createResponse();
+  const next = jest.fn();
+
+  checkCredentials(req, res, next);
+
+  expect(next).not.toBeCalled();
+  expect(req.body.id).not.toBeDefined();
+  expect(res.statusCode).toEqual(404);
 });

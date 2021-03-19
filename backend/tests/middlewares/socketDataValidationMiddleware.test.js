@@ -45,6 +45,11 @@ beforeEach(() => {
   });
 });
 
+afterEach(() => {
+  user.removeAll();
+  game.removeAll();
+});
+
 test("should validate data", () => {
   const userData = { username: user1FromGame1.username };
   const join = jest.fn();
@@ -81,6 +86,20 @@ test("should not validate data (a game is not being played)", () => {
   const userData = { username: notExistingUser.username };
   const join = jest.fn();
   const socket = { userData, join };
+
+  const next = jest.fn();
+
+  dataValidationMiddleware(socket, next);
+
+  expect(socket.gameData).not.toBeDefined();
+  expect(next).toHaveBeenCalledTimes(1);
+  expect(next.mock.calls[0][0]).toBeDefined();
+  expect(join).not.toHaveBeenCalled();
+});
+
+test("should not validate data (no userData)", () => {
+  const join = jest.fn();
+  const socket = { join };
 
   const next = jest.fn();
 
