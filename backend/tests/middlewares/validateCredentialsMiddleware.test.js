@@ -90,3 +90,23 @@ test("should not validate credentials (no password)", () => {
   expect(next).not.toHaveBeenCalled();
   expect(res.statusCode).toEqual(400);
 });
+
+test("should not validate credentials (invalid credentials types)", () => {
+  const username = 6;
+  const password = 5;
+
+  const req = httpMocks.createRequest({
+    body: {
+      username,
+      password,
+    },
+  });
+
+  const next = jest.fn();
+  const res = httpMocks.createResponse();
+
+  validateCredentialsMiddleware(req, res, next);
+
+  expect(next).not.toHaveBeenCalled();
+  expect(res.statusCode).toEqual(400);
+});

@@ -1,14 +1,13 @@
 const socketJWTMiddleware = require("../../middlewares/socketJWTMIddleware");
 const { generateJWTToken } = require("../../auth/authHelpers");
 
+const userData = {
+  id: "0",
+  username: "John",
+};
+const { token } = generateJWTToken(userData);
+
 test("should validate connection", () => {
-  const userData = {
-    id: "0",
-    username: "John",
-  };
-
-  const { token } = generateJWTToken(userData);
-
   const socket = {};
   socket.handshake = {};
   socket.handshake.auth = {};
@@ -39,19 +38,13 @@ test("should not validate connection (no token)", () => {
 });
 
 test("should not validate connection (invalid token)", () => {
-  const userData = {
-    id: "0",
-    username: "John",
-  };
-
-  let { token } = generateJWTToken(userData);
   const wrongChar = token.charAt(0) === "a" ? "b" : "a";
-  token = wrongChar + token.substring(1);
+  const wrongToken = wrongChar + token.substring(1);
 
   const socket = {};
   socket.handshake = {};
   socket.handshake.auth = {};
-  socket.handshake.auth.token = token;
+  socket.handshake.auth.token = wrongToken;
 
   const next = jest.fn();
 

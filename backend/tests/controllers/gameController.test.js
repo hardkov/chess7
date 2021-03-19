@@ -49,6 +49,11 @@ beforeEach(() => {
   });
 });
 
+afterEach(() => {
+  user.removeAll();
+  game.removeAll();
+});
+
 test("should game start", () => {
   const req = httpMocks.createRequest({
     jwt: {

@@ -7,8 +7,12 @@ beforeEach(() => {
   removeAll();
 });
 
+afterEach(() => {
+  removeAll();
+});
+
 test("should register user", () => {
-  const username = "Joshua";
+  const username = "Joshuaaaaa";
 
   const req = httpMocks.createRequest({
     body: {
@@ -34,7 +38,7 @@ test("should register user", () => {
 });
 
 describe("requesting access", () => {
-  const username = "Joshua";
+  const username = "Joshuaaaaa";
   const password = "superpassword";
   let id;
 

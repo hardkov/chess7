@@ -6,6 +6,7 @@ const dataValidationMiddleware = (socket, next) => {
     const err = new Error("Invalid user data");
     return next(err);
   }
+
   const { username } = socket.userData;
 
   if (get(username) == null) {

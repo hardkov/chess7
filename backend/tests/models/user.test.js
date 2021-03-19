@@ -7,12 +7,30 @@ const {
   removeByUsername,
 } = require("../../models/user");
 
-test("should add to and get from database", () => {
-  const user1 = {
-    username: "John",
-    passwordHash: "jasdlkasjdkjlaj",
-  };
+const user1 = {
+  username: "John",
+  passwordHash: "jasdlkasjdkjlaj",
+};
 
+const user2 = {
+  username: "Adam",
+  passwordHash: "jasdlkasjdkjlaj",
+};
+
+const user3 = {
+  username: "Mike",
+  passwordHash: "jasdlkasjdkjlaj",
+};
+
+beforeEach(() => {
+  removeAll();
+});
+
+afterEach(() => {
+  removeAll();
+});
+
+test("should add to and get from database", () => {
   const id1 = add(user1);
   const numberId1 = parseInt(id1);
 
@@ -26,21 +44,6 @@ test("should add to and get from database", () => {
 });
 
 test("should remove all from database", () => {
-  const user1 = {
-    username: "John",
-    passwordHash: "jasdlkasjdkjlaj",
-  };
-
-  const user2 = {
-    username: "Adam",
-    passwordHash: "jasdlkasjdkjlaj",
-  };
-
-  const user3 = {
-    username: "Mike",
-    passwordHash: "jasdlkasjdkjlaj",
-  };
-
   add(user1);
   add(user2);
   add(user3);
@@ -53,23 +56,6 @@ test("should remove all from database", () => {
 });
 
 test("should get all from database", () => {
-  removeAll();
-
-  const user1 = {
-    username: "John",
-    passwordHash: "jasdlkasjdkjlaj",
-  };
-
-  const user2 = {
-    username: "Adam",
-    passwordHash: "jasdlkasjdkjlaj",
-  };
-
-  const user3 = {
-    username: "Mike",
-    passwordHash: "jasdlkasjdkjlaj",
-  };
-
   add(user1);
   add(user2);
   add(user3);
@@ -82,11 +68,6 @@ test("should get all from database", () => {
 });
 
 test("should remove from database by id", () => {
-  const user1 = {
-    username: "Patric",
-    passwordHash: "jasdlkasjdkjlaj",
-  };
-
   const id = add(user1);
 
   removeById(id);
@@ -95,11 +76,6 @@ test("should remove from database by id", () => {
 });
 
 test("should remove from database by username", () => {
-  const user1 = {
-    username: "Adrian",
-    passwordHash: "jasdlkasjdkjlaj",
-  };
-
   add(user1);
 
   removeByUsername(user1.username);

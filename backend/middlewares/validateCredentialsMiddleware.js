@@ -10,6 +10,11 @@ const validateCredentialsMiddleware = (req, res, next) => {
   if (password == null) {
     return res.status(400).send({ errors: ["No password"] });
   }
+
+  if (typeof username != "string" || typeof password != "string") {
+    return res.status(400).send({ errors: ["Invalid credentials type"] });
+  }
+
   if (username.length < 8) {
     return res.status(400).send({ errors: ["Too short username"] });
   }

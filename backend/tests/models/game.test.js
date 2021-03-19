@@ -9,13 +9,33 @@ const {
   removeAll,
 } = require("../../models/game");
 
-test("should add to and get from database", () => {
-  const game1 = {
-    gameClient: new Chess(),
-    whitePlayerName: "Adrian",
-    blackPlayerName: "Brian",
-  };
+const game1 = {
+  gameClient: new Chess(),
+  whitePlayerName: "Ben",
+  blackPlayerName: "Samuel",
+};
 
+const game2 = {
+  gameClient: new Chess(),
+  whitePlayerName: "Andy",
+  blackPlayerName: "Susan",
+};
+
+const game3 = {
+  gameClient: new Chess(),
+  whitePlayerName: "Whitney",
+  blackPlayerName: "Daniel",
+};
+
+beforeEach(() => {
+  removeAll();
+});
+
+afterEach(() => {
+  removeAll();
+});
+
+test("should add to and get from database", () => {
   const id1 = add(game1);
   const numberId1 = parseInt(id1);
 
@@ -29,42 +49,16 @@ test("should add to and get from database", () => {
 });
 
 test("should find a game with a player in database", () => {
-  const game1 = {
-    gameClient: new Chess(),
-    whitePlayerName: "Edward",
-    blackPlayerName: "Mark",
-  };
-
   add(game1);
 
-  const retrievedGame1 = findGameWithPlayer("Edward");
-  const retrievedGame2 = findGameWithPlayer("Mark");
+  const retrievedGame1 = findGameWithPlayer(game1.whitePlayerName);
+  const retrievedGame2 = findGameWithPlayer(game1.blackPlayerName);
 
   expect(retrievedGame1).toEqual(game1);
   expect(retrievedGame2).toEqual(game1);
 });
 
 test("should get all games from database", () => {
-  removeAll();
-
-  const game1 = {
-    gameClient: new Chess(),
-    whitePlayerName: "Ben",
-    blackPlayerName: "Samuel",
-  };
-
-  const game2 = {
-    gameClient: new Chess(),
-    whitePlayerName: "Andy",
-    blackPlayerName: "Susan",
-  };
-
-  const game3 = {
-    gameClient: new Chess(),
-    whitePlayerName: "Whitney",
-    blackPlayerName: "Daniel",
-  };
-
   add(game1);
   add(game2);
   add(game3);
@@ -77,12 +71,6 @@ test("should get all games from database", () => {
 });
 
 test("should remove a game from database", () => {
-  const game1 = {
-    gameClient: new Chess(),
-    whitePlayerName: "Andrew",
-    blackPlayerName: "Cris",
-  };
-
   add(game1);
 
   removeGame(game1.id);
@@ -91,23 +79,9 @@ test("should remove a game from database", () => {
 });
 
 test("should remove all games from database", () => {
-  const game1 = {
-    gameClient: new Chess(),
-    whitePlayerName: "Ben",
-    blackPlayerName: "Samuel",
-  };
-
-  const game2 = {
-    gameClient: new Chess(),
-    whitePlayerName: "Andy",
-    blackPlayerName: "Susan",
-  };
-
-  const game3 = {
-    gameClient: new Chess(),
-    whitePlayerName: "Whitney",
-    blackPlayerName: "Daniel",
-  };
+  add(game1);
+  add(game2);
+  add(game3);
 
   removeAll();
 
