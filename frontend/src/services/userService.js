@@ -30,7 +30,12 @@ const openConnection = () => {
   socket = io.connect(SOCKET_BASE_URL);
 
   socket.on("liveGames", (moveData) => {
+    console.log(moveData);
     liveGamesSourceSubject.next(moveData);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Main socket disconnected");
   });
 };
 

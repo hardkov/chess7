@@ -8,10 +8,11 @@ import useGames from "../hooks/useGames";
 const Games = () => {
   const state = useGames();
 
-  const games = state.gameList.map((game, idx) => (
-    <Grid key={idx} item xs={4}>
+  const games = state.gameList.map((game) => (
+    <Grid key={game.id} item xs={4}>
       <Chessboard
-        id={idx}
+        key={game.id}
+        id={game.id}
         width="200"
         draggable={false}
         position={game.position}
