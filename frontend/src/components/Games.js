@@ -3,10 +3,10 @@ import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Chessboard from "chessboardjsx";
-import useCurrentGames from "../hooks/useGames";
+import useGames from "../hooks/useGames";
 
-const CurrentGames = () => {
-  const state = useCurrentGames();
+const Games = () => {
+  const state = useGames();
 
   const games = state.gameList.map((game, idx) => (
     <Grid key={idx} item xs={4}>
@@ -28,4 +28,4 @@ const CurrentGames = () => {
   );
 };
 
-export default CurrentGames;
+export default Games;

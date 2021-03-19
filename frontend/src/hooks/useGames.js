@@ -1,13 +1,13 @@
 import { useEffect, useRef, useReducer } from "react";
 import { getGameList } from "../services/gameService";
 import { liveGamesSource } from "../services/userService";
-import { actionTypes, reducer } from "../reducers/currentGamesReducer";
+import { actionTypes, reducer } from "../reducers/gamesReducer";
 
 const initialState = {
   gameList: [],
 };
 
-const useCurrentGames = () => {
+const useGames = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const subscribtionRef = useRef(null);
 
@@ -42,4 +42,4 @@ const useCurrentGames = () => {
   return state;
 };
 
-export default useCurrentGames;
+export default useGames;
