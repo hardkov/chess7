@@ -3,10 +3,10 @@ import { io } from "socket.io-client";
 
 import { USER_LIST_ENDPOINT, SOCKET_BASE_URL } from "./config";
 import { authHeaders } from "../helpers/auth";
-import { ReplaySubject } from "rxjs";
+import { Subject } from "rxjs";
 
 let socket;
-const liveGamesSourceSubject = new ReplaySubject(1);
+const liveGamesSourceSubject = new Subject();
 
 const getUserList = async () => {
   try {
