@@ -19,7 +19,7 @@ const finishGame = (gameId, mainChannel, roomChannel) => {
 
   for (let clientId of clients) {
     const clientSocket = roomChannel.sockets.get(clientId);
-    clientSocket.disconnect(true);
+    clientSocket.disconnect(false);
   }
 };
 
