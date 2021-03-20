@@ -60,14 +60,14 @@ const getGameTurn = (position) => {
   return turn;
 };
 
-const calcWidth = () => {
-  const chessboardContainer = document.getElementById("chessboardContainer");
+const calcWidth = (id, maxWidth) => {
+  const chessboardContainer = document.getElementById(id);
   const vwPixels = window.screen.width / 100;
 
   if (chessboardContainer != null) {
     const dynamicWidth = chessboardContainer.offsetWidth - vwPixels * 2;
 
-    return Math.min(dynamicWidth, 720);
+    return Math.min(dynamicWidth, maxWidth);
   }
 };
 

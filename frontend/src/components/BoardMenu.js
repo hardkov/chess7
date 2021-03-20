@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
   progress: {
     marginLeft: "50%",
+    color: theme.palette.primary.dark,
   },
 }));
 
@@ -44,7 +45,7 @@ const BoardMenu = ({
       <div className={classes.paper}>
         <Grid container direction="row" justify="center" alignItems="stretch">
           <Grid item xs={3}></Grid>
-          <Grid item id="chessboardContainer" xs={5}>
+          <Grid item id="mainBoardContainer" xs={5}>
             <Chessboard
               position={position}
               orientation={color}
@@ -53,7 +54,7 @@ const BoardMenu = ({
                 color === getGameTurn(position)
               }
               onDrop={onDrop}
-              calcWidth={calcWidth}
+              calcWidth={() => calcWidth("mainBoardContainer", 720)}
             />
           </Grid>
           <Grid item xs={3}>

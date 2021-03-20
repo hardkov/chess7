@@ -1,28 +1,28 @@
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 
-const animate = (element) => {
+const animate = (element, duration) => {
   gsap.fromTo(
     element,
     {
       opacity: 0,
     },
     {
-      duration: 1,
+      duration: duration,
       opacity: 1,
     }
   );
 };
 
-const Animation = ({ children, onRender, onMount }) => {
+const Animation = ({ children, onRender, onMount, duration = 1 }) => {
   let componentRef = useRef(null);
 
   useEffect(() => {
-    if (onMount) animate(componentRef);
+    if (onMount) animate(componentRef, duration);
   }, []);
 
   useEffect(() => {
-    if (onRender) animate(componentRef);
+    if (onRender) animate(componentRef, duration);
   });
 
   return <div ref={(el) => (componentRef = el)}>{children}</div>;

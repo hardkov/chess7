@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.dark,
   },
   form: {
     width: "100%",
@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  progress: {
+    color: theme.palette.primary.dark,
   },
 }));
 
@@ -49,7 +52,7 @@ const LoginForm = ({
             Login
           </Typography>
           {isLoading ? (
-            <CircularProgress />
+            <CircularProgress className={classes.progress} />
           ) : (
             <form className={classes.form} noValidate onSubmit={handleSubmit}>
               <Grid container spacing={2}>
@@ -61,7 +64,6 @@ const LoginForm = ({
                     fullWidth
                     id="username"
                     label="Username"
-                    autoFocus
                     onChange={handleCredentialsChange}
                   />
                 </Grid>

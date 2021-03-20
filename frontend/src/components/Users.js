@@ -10,7 +10,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import MuiTableCell from "@material-ui/core/TableCell";
-import { makeStyles, withStyles } from "@material-ui/core";
+import { withStyles } from "@material-ui/core";
 import useUserList from "../hooks/useUserList";
 
 const TableCell = withStyles({
@@ -19,14 +19,7 @@ const TableCell = withStyles({
   },
 })(MuiTableCell);
 
-const useStyles = makeStyles({
-  table: {
-    width: "80%",
-  },
-});
-
 export default function Users() {
-  const classes = useStyles();
   const [userList, redirect, challangeSelectedPlayer] = useUserList();
 
   if (redirect) return <Redirect to="/play" />;
@@ -34,7 +27,7 @@ export default function Users() {
   if (userList == null) return <div />;
 
   return (
-    <TableContainer className={classes.table} component={Paper} elevation={3}>
+    <TableContainer component={Paper} elevation={3}>
       <Table>
         <TableHead>
           <TableRow>

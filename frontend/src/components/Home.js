@@ -6,12 +6,19 @@ import Brightness4Icon from "@material-ui/icons/Brightness4";
 
 import Games from "./Games";
 import Users from "./Users";
+import About from "./About";
+import Ad from "./Ad";
 import Animation from "./utils/Animation";
 import ThemeChangeContext from "../context/ThemeChangeContext";
+import { isLoggedIn } from "../services/authService";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
     marginTop: theme.spacing(8),
+  },
+
+  grid: {
+    marginLeft: theme.spacing(1),
   },
 
   buttonContainer: {
@@ -34,19 +41,22 @@ export default function Home() {
       </div>
       <div className={classes.gridContainer}>
         <Grid
+          className={classes.grid}
           container
-          spacing={1}
+          spacing={2}
           direction="row"
-          justify="center"
+          justify="space-evenly"
           alignItems="flex-start"
         >
           <Grid item xs={3}>
-            <Users />
+            {isLoggedIn() ? <Users /> : <About />}
           </Grid>
           <Grid item xs={5}>
             <Games />
           </Grid>
-          <Grid item xs={3}></Grid>
+          <Grid item xs={3}>
+            <Ad />
+          </Grid>
         </Grid>
       </div>
     </Animation>

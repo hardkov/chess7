@@ -31,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(2),
   },
+
+  iconButton: {
+    color: theme.palette.primary.dark,
+  },
 }));
 
 export default function Header() {
@@ -41,7 +45,11 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar position="sticky">
         <Toolbar>
-          <IconButton color="secondary" component={RouterLink} to="/">
+          <IconButton
+            className={classes.iconButton}
+            component={RouterLink}
+            to="/"
+          >
             <HomeIcon />
           </IconButton>
           <div className={classes.buttonContainer}>

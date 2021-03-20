@@ -50,7 +50,7 @@ export default function GamePanel({
             fullWidth={true}
             size="large"
             orientation="vertical"
-            color="primary"
+            color="secondary"
             variant="contained"
           >
             {buttons.map(({ text, onClick }, idx) => (
