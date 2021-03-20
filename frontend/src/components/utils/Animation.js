@@ -2,10 +2,16 @@ import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 
 const animate = (element) => {
-  gsap.from(element, {
-    duration: 1,
-    opacity: 0,
-  });
+  gsap.fromTo(
+    element,
+    {
+      opacity: 0,
+    },
+    {
+      duration: 1,
+      opacity: 1,
+    }
+  );
 };
 
 const Animation = ({ children, onRender, onMount }) => {
