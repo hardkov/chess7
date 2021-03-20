@@ -1,10 +1,7 @@
 const httpMocks = require("node-mocks-http");
 const { Chess } = require("chess.js");
 
-const {
-  startGame,
-  checkIfPlaying,
-} = require("../../controllers/gameController");
+const { checkIfPlaying } = require("../../controllers/gameController");
 const user = require("../../models/user");
 const game = require("../../models/game");
 
@@ -23,11 +20,6 @@ const userNotPlaying1 = {
   passwordHash: "sajgalsdjalkdjl",
 };
 
-const userNotPlaying2 = {
-  username: "Daniel",
-  passwordHash: "sajgaldjalkdjl",
-};
-
 const notExistingUser = {
   username: "ImNotThere",
   passwordHash: "asdasdad",
@@ -40,7 +32,6 @@ beforeEach(() => {
   user.add(user1FromGame1);
   user.add(user2FromGame1);
   user.add(userNotPlaying1);
-  user.add(userNotPlaying2);
 
   game.add({
     gameClient: new Chess(),
@@ -52,63 +43,6 @@ beforeEach(() => {
 afterEach(() => {
   user.removeAll();
   game.removeAll();
-});
-
-test("should game start", () => {
-  const req = httpMocks.createRequest({
-    jwt: {
-      username: userNotPlaying1.username,
-    },
-    body: {
-      username: userNotPlaying2.username,
-    },
-  });
-
-  const res = httpMocks.createResponse();
-
-  startGame(req, res);
-
-  expect(res.statusCode).toEqual(201);
-  expect(game.findGameWithPlayer(userNotPlaying1.username)).toBeDefined();
-  expect(game.findGameWithPlayer(userNotPlaying2.username)).toBeDefined();
-});
-
-test("should not start game(requesting user does not exists)", () => {
-  const req = httpMocks.createRequest({
-    jwt: {
-      username: notExistingUser.username,
-    },
-    body: {
-      username: userNotPlaying2.username,
-    },
-  });
-
-  const res = httpMocks.createResponse();
-
-  startGame(req, res);
-
-  expect(res.statusCode).toEqual(404);
-  expect(game.findGameWithPlayer(notExistingUser.username)).not.toBeDefined();
-  expect(game.findGameWithPlayer(userNotPlaying2.username)).not.toBeDefined();
-});
-
-test("should not start game(user to be challanged does not exist)", () => {
-  const req = httpMocks.createRequest({
-    jwt: {
-      username: userNotPlaying1.username,
-    },
-    body: {
-      username: notExistingUser.username,
-    },
-  });
-
-  const res = httpMocks.createResponse();
-
-  startGame(req, res);
-
-  expect(res.statusCode).toEqual(404);
-  expect(game.findGameWithPlayer(notExistingUser.username)).not.toBeDefined();
-  expect(game.findGameWithPlayer(userNotPlaying1.username)).not.toBeDefined();
 });
 
 test("should response that is playing", () => {
