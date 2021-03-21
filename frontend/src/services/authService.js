@@ -3,6 +3,7 @@ import { BehaviorSubject } from "rxjs";
 
 import { getUser, removeUser, saveUser } from "../helpers/storage";
 import { LOGIN_ENDPOINT, REGISTER_ENDPOINT } from "./config";
+import { closeUserConnection, openUserConnection } from "./userService";
 
 const currentUserSubject = new BehaviorSubject(getUser());
 
@@ -17,8 +18,8 @@ const loginUser = async ({ username, password }) => {
       const user = { username: username, token: response.data.accessToken };
 
       saveUser(user);
-
       currentUserSubject.next(user);
+      openUserConnection();
 
       return { success: true };
     }
@@ -39,6 +40,7 @@ const registerUser = async ({ username, password }) => {
 
       saveUser(user);
       currentUserSubject.next(user);
+      openUserConnection();
 
       return { success: true };
     }
@@ -49,6 +51,7 @@ const registerUser = async ({ username, password }) => {
 
 const logoutUser = () => {
   removeUser();
+  closeUserConnection();
   currentUserSubject.next(null);
 };
 

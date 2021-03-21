@@ -12,6 +12,7 @@ import {
 import { authHeaders } from "../helpers/auth";
 import { getToken } from "../services/authService";
 import { moveTypes } from "../helpers/chess";
+import { notifyAboutGame } from "./userService";
 
 let moveSocket;
 const positionSourceSubject = new ReplaySubject(1);
@@ -25,6 +26,7 @@ const challangePlayer = async (username) => {
     );
 
     if (response.status === 201) {
+      notifyAboutGame(username);
       return true;
     }
   } catch (error) {

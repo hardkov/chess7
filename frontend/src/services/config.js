@@ -11,10 +11,13 @@ const GAME_LIST_ENDPOINT = "game/list";
 
 const SOCKET_BASE_URL = "ws://localhost:5000";
 const SOCKET_MOVE_ENDPOINT = SOCKET_BASE_URL + "/moves";
+const SOCKET_NOTIFICATION_ENDPOINT = SOCKET_BASE_URL + "/notification";
 
 const socketEvents = {
   move: "move",
   specialMove: "specialMove",
+  gameStarted: "gameStarted",
+  liveGames: "liveGames",
 };
 
 export {
@@ -26,5 +29,6 @@ export {
   GAME_LIST_ENDPOINT,
   SOCKET_BASE_URL,
   SOCKET_MOVE_ENDPOINT,
+  SOCKET_NOTIFICATION_ENDPOINT,
   socketEvents,
 };

@@ -5,17 +5,36 @@ import {
   currentUser,
   isLoggedIn,
 } from "../services/authService";
+import { notificationSource } from "../services/userService";
 
 const useHeader = () => {
   const [user, setUser] = useState(currentUserValue());
-  const subscribtionRef = useRef(null);
+  const [gameNotification, setGameNotification] = useState(false);
+
+  const userSubscribtionRef = useRef(null);
+  const gameSubscriptionRef = useRef(null);
 
   useEffect(() => {
-    subscribtionRef.current = currentUser().subscribe((user) => setUser(user));
+    userSubscribtionRef.current = currentUser().subscribe((user) =>
+      setUser(user)
+    );
+
+    gameSubscriptionRef.current = notificationSource().subscribe((player) => {
+      if (
+        currentUserValue() != null &&
+        currentUserValue().username === player
+      ) {
+        setGameNotification(true);
+      }
+    });
 
     return () => {
-      if (subscribtionRef.current) {
-        subscribtionRef.current.unsubscribe();
+      if (userSubscribtionRef.current) {
+        userSubscribtionRef.current.unsubscribe();
+      }
+
+      if (gameSubscriptionRef.current) {
+        gameSubscriptionRef.current.unsubscribe();
       }
     };
   }, []);
@@ -34,7 +53,7 @@ const useHeader = () => {
 
   const buttons = accessGained ? loggedInLinks : notLoggedInLinks;
 
-  return [user, buttons, accessGained];
+  return [user, buttons, accessGained, gameNotification];
 };
 
 export default useHeader;

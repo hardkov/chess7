@@ -9,6 +9,7 @@ import Animation from "./utils/Animation";
 import { getGameTurn, calcWidth, gameStates } from "../helpers/chess";
 import { Redirect } from "react-router";
 import { useActionExecutor } from "../hooks/useActionExecutor";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -18,6 +19,13 @@ const useStyles = makeStyles((theme) => ({
   progress: {
     marginLeft: "50%",
     color: theme.palette.primary.dark,
+  },
+
+  infoContainer: {
+    display: "flex",
+    flex: 1,
+    justifyContent: "center",
+    marginTop: theme.spacing(8),
   },
 }));
 
@@ -37,8 +45,16 @@ const BoardMenu = ({
 
   if (isLoading) return <CircularProgress className={classes.progress} />;
 
-  if (position == null || color == null || enemy == null || gameState == null)
-    return <div />;
+  if (position == null || color == null || enemy == null || gameState == null) {
+    return (
+      <div className={classes.infoContainer}>
+        <Typography color="textSecondary" variant="h5">
+          You are not playing right now. Come back here when you challange
+          someone
+        </Typography>
+      </div>
+    );
+  }
 
   return (
     <Animation onMount>

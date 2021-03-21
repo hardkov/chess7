@@ -15,7 +15,7 @@ const Ad = () => {
   const ad = useAds(10000);
 
   return (
-    <Animation onRender onUnRender duration={2}>
+    <Animation onRender duration={2}>
       <a href={ad.url}>
         <img className={classes.ad} src={ad.img} />
       </a>
