@@ -1,6 +1,6 @@
 const { Chess } = require("chess.js");
 
-const dataValidationMiddleware = require("../../middlewares/socketDataValidationMiddleware");
+const socketGameMiddleware = require("../../middlewares/socketGameMiddleware");
 const user = require("../../models/user");
 const game = require("../../models/game");
 
@@ -22,11 +22,6 @@ const userNotPlaying1 = {
 const userNotPlaying2 = {
   username: "Daniel",
   passwordHash: "sajgaldjalkdjl",
-};
-
-const notExistingUser = {
-  username: "ImNotThere",
-  passwordHash: "asdasdad",
 };
 
 beforeEach(() => {
@@ -57,7 +52,7 @@ test("should validate data", () => {
 
   const next = jest.fn();
 
-  dataValidationMiddleware(socket, next);
+  socketGameMiddleware(socket, next);
   const userGame = game.findGameWithPlayer(user1FromGame1.username);
 
   expect(socket.gameData).toEqual(userGame);
@@ -67,43 +62,14 @@ test("should validate data", () => {
   expect(join.mock.calls[0][0]).toBe(userGame.id);
 });
 
-test("should not validate data (requesting user does not exists)", () => {
-  const userData = { username: notExistingUser.username };
-  const join = jest.fn();
-  const socket = { userData, join };
-
-  const next = jest.fn();
-
-  dataValidationMiddleware(socket, next);
-
-  expect(socket.gameData).not.toBeDefined();
-  expect(next).toHaveBeenCalledTimes(1);
-  expect(next.mock.calls[0][0]).toBeDefined();
-  expect(join).not.toHaveBeenCalled();
-});
-
 test("should not validate data (a game is not being played)", () => {
-  const userData = { username: notExistingUser.username };
+  const userData = { username: userNotPlaying1.username };
   const join = jest.fn();
   const socket = { userData, join };
 
   const next = jest.fn();
 
-  dataValidationMiddleware(socket, next);
-
-  expect(socket.gameData).not.toBeDefined();
-  expect(next).toHaveBeenCalledTimes(1);
-  expect(next.mock.calls[0][0]).toBeDefined();
-  expect(join).not.toHaveBeenCalled();
-});
-
-test("should not validate data (no userData)", () => {
-  const join = jest.fn();
-  const socket = { join };
-
-  const next = jest.fn();
-
-  dataValidationMiddleware(socket, next);
+  socketGameMiddleware(socket, next);
 
   expect(socket.gameData).not.toBeDefined();
   expect(next).toHaveBeenCalledTimes(1);

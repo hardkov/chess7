@@ -1,20 +1,19 @@
 const express = require("express");
 const socketio = require("socket.io");
-// const path = require("path");
 
 const userRouter = require("./routes/user.js");
 const gameRouter = require("./routes/game.js");
+const { socketEvents } = require("./handlers/helpers");
 const socketJWTMiddleware = require("./middlewares/socketJWTMIddleware");
-const dataValidationMiddleware = require("./middlewares/socketDataValidationMiddleware.js");
+const socketUserMiddleware = require("./middlewares/socketUserMiddleware.js");
+const socketGameMiddleware = require("./middlewares/socketGameMiddleware.js");
 
 const port = process.env.PORT || 5000;
 const app = express();
 
-//tmp cors enabling
 const cors = require("cors");
 app.use(cors());
 
-// app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.use("/user", userRouter);
 app.use("/game", gameRouter);
 
@@ -30,19 +29,31 @@ const io = socketio(server, {
 });
 
 const moveNamespace = io.of("/moves");
+const notificationNamespace = io.of("/notification");
 
 const { moveHandler } = require("./handlers/moveHandler")(moveNamespace, io);
 const { specialMoveHandler } = require("./handlers/specialMoveHandler")(
   moveNamespace,
   io
 );
+const {
+  gameNotificationHandler,
+} = require("./handlers/gameNotificationHandler")(notificationNamespace, io);
 
 moveNamespace.use(socketJWTMiddleware);
-moveNamespace.use(dataValidationMiddleware);
+moveNamespace.use(socketUserMiddleware);
+moveNamespace.use(socketGameMiddleware);
 moveNamespace.on("connection", (socket) => {
   console.log("Move channel " + socket.id);
-  socket.on("move", moveHandler);
-  socket.on("specialMove", specialMoveHandler);
+  socket.on(socketEvents.move, moveHandler);
+  socket.on(socketEvents.specialMove, specialMoveHandler);
+});
+
+notificationNamespace.use(socketJWTMiddleware);
+notificationNamespace.use(socketUserMiddleware);
+notificationNamespace.on("connection", (socket) => {
+  console.log("Notification channel " + socket.id);
+  socket.on(socketEvents.gameStarted, gameNotificationHandler);
 });
 
 io.on("connection", (socket) => {

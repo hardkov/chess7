@@ -1,4 +1,4 @@
-const { moveTypes, finishGame } = require("./helpers");
+const { moveTypes, socketEvents, finishGame } = require("./helpers");
 
 module.exports = (moveNamespace, io) => {
   const moveHandler = function (move) {
@@ -15,7 +15,7 @@ module.exports = (moveNamespace, io) => {
       gameClient.turn() == "w" ? whitePlayerName : blackPlayerName;
 
     if (userToMove !== username) {
-      socket.emit("move", {
+      socket.emit(socketEvents.move, {
         type: moveTypes.normal,
         success: false,
         err: "not your move",
@@ -27,7 +27,7 @@ module.exports = (moveNamespace, io) => {
     const moveConfirmation = gameClient.move(move);
 
     if (moveConfirmation == null) {
-      socket.emit("move", {
+      socket.emit(socketEvents.move, {
         type: moveTypes.normal,
         success: false,
         err: "invalid move",
@@ -36,13 +36,13 @@ module.exports = (moveNamespace, io) => {
       return;
     }
 
-    moveNamespace.to(id).emit("move", {
+    moveNamespace.to(id).emit(socketEvents.move, {
       type: moveTypes.normal,
       success: true,
       currentPosition: gameClient.fen(),
     });
 
-    io.emit("liveGames", {
+    io.emit(socketEvents.liveGames, {
       id,
       currentPosition: gameClient.fen(),
     });

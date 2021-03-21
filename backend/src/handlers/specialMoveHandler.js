@@ -1,5 +1,5 @@
 const { update } = require("../models/game");
-const { moveTypes, finishGame } = require("./helpers");
+const { moveTypes, socketEvents, finishGame } = require("./helpers");
 
 module.exports = (moveNamespace, io) => {
   const specialMoveHandler = function (move) {
@@ -10,7 +10,7 @@ module.exports = (moveNamespace, io) => {
     if (move === moveTypes.surrender) {
       const winner = username === whitePlayerName ? "black" : "white";
 
-      moveNamespace.to(id).emit("move", {
+      moveNamespace.to(id).emit(socketEvents.move, {
         type: moveTypes.special,
         move: moveTypes.surrender,
         winner: winner,
@@ -21,7 +21,7 @@ module.exports = (moveNamespace, io) => {
       socket.gameData.drawOfferedBy = username;
       update(socket.gameData);
 
-      moveNamespace.to(id).emit("move", {
+      moveNamespace.to(id).emit(socketEvents.move, {
         type: moveTypes.special,
         move: moveTypes.drawOffer,
         sender: username,
@@ -30,7 +30,7 @@ module.exports = (moveNamespace, io) => {
       const { drawOfferedBy } = socket.gameData;
 
       if (drawOfferedBy !== username) {
-        moveNamespace.to(id).emit("move", {
+        moveNamespace.to(id).emit(socketEvents.move, {
           type: moveTypes.special,
           move: moveTypes.drawAccept,
         });
@@ -41,7 +41,7 @@ module.exports = (moveNamespace, io) => {
       socket.gameData.drawOfferedBy = null;
       update(socket.gameData);
 
-      moveNamespace.to(id).emit("move", {
+      moveNamespace.to(id).emit(socketEvents.move, {
         type: moveTypes.special,
         move: moveTypes.drawDecline,
       });

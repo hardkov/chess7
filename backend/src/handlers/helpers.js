@@ -9,8 +9,15 @@ moveTypes = {
   normal: "NORMAL",
 };
 
+const socketEvents = {
+  move: "move",
+  specialMove: "specialMove",
+  gameStarted: "gameStarted",
+  liveGames: "liveGames",
+};
+
 const finishGame = (gameId, mainChannel, roomChannel) => {
-  mainChannel.emit("liveGames", {
+  mainChannel.emit(socketEvents.liveGames, {
     id: gameId,
   });
 
@@ -23,4 +30,4 @@ const finishGame = (gameId, mainChannel, roomChannel) => {
   }
 };
 
-module.exports = { moveTypes, finishGame };
+module.exports = { moveTypes, socketEvents, finishGame };
