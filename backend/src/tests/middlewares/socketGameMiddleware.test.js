@@ -1,7 +1,6 @@
 const { Chess } = require("chess.js");
 
 const socketGameMiddleware = require("../../middlewares/socketGameMiddleware");
-const user = require("../../models/user");
 const game = require("../../models/game");
 
 const user1FromGame1 = {
@@ -19,19 +18,8 @@ const userNotPlaying1 = {
   passwordHash: "sajgalsdjalkdjl",
 };
 
-const userNotPlaying2 = {
-  username: "Daniel",
-  passwordHash: "sajgaldjalkdjl",
-};
-
-beforeEach(() => {
-  user.removeAll();
+beforeAll(() => {
   game.removeAll();
-
-  user.add(user1FromGame1);
-  user.add(user2FromGame1);
-  user.add(userNotPlaying1);
-  user.add(userNotPlaying2);
 
   game.add({
     gameClient: new Chess(),
@@ -40,8 +28,7 @@ beforeEach(() => {
   });
 });
 
-afterEach(() => {
-  user.removeAll();
+afterAll(() => {
   game.removeAll();
 });
 

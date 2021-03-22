@@ -1,3 +1,5 @@
+const database = require("../../models/database");
+
 const { Chess } = require("chess.js");
 const httpMocks = require("node-mocks-http");
 
@@ -30,14 +32,16 @@ const notExistingUser = {
   passwordHash: "asdasdad",
 };
 
-beforeEach(() => {
-  user.removeAll();
+database.connect();
+
+beforeAll(async () => {
+  await user.removeAll();
   game.removeAll();
 
-  user.add(user1FromGame1);
-  user.add(user2FromGame1);
-  user.add(userNotPlaying1);
-  user.add(userNotPlaying2);
+  await user.add(user1FromGame1);
+  await user.add(user2FromGame1);
+  await user.add(userNotPlaying1);
+  await user.add(userNotPlaying2);
 
   game.add({
     gameClient: new Chess(),
@@ -46,12 +50,13 @@ beforeEach(() => {
   });
 });
 
-afterEach(() => {
-  user.removeAll();
+afterAll(async () => {
   game.removeAll();
+  await user.removeAll();
+  await database.disconnect();
 });
 
-test("should validate game", () => {
+test("should validate game", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: userNotPlaying1.username,
@@ -63,12 +68,13 @@ test("should validate game", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  validateChallangeMiddleware(req, res, next);
+  await validateChallangeMiddleware(req, res, next);
 
+  expect(res.statusCode).toEqual(200);
   expect(next).toHaveBeenCalled();
 });
 
-test("should not validate game(requesting user does not exists)", () => {
+test("should not validate game(requesting user does not exists)", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: notExistingUser.username,
@@ -80,13 +86,13 @@ test("should not validate game(requesting user does not exists)", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  validateChallangeMiddleware(req, res, next);
+  await validateChallangeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(404);
   expect(next).not.toHaveBeenCalled();
 });
 
-test("should not validate game(user to be challanged does not exist)", () => {
+test("should not validate game(user to be challanged does not exist)", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: userNotPlaying1.username,
@@ -98,13 +104,13 @@ test("should not validate game(user to be challanged does not exist)", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  validateChallangeMiddleware(req, res, next);
+  await validateChallangeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(404);
   expect(next).not.toHaveBeenCalled();
 });
 
-test("should not validate game(can't challange yourself)", () => {
+test("should not validate game(can't challange yourself)", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: userNotPlaying1.username,
@@ -116,13 +122,13 @@ test("should not validate game(can't challange yourself)", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  validateChallangeMiddleware(req, res, next);
+  await validateChallangeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(400);
   expect(next).not.toHaveBeenCalled();
 });
 
-test("should not validate game(you are playing now)", () => {
+test("should not validate game(you are playing now)", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: user1FromGame1.username,
@@ -134,13 +140,13 @@ test("should not validate game(you are playing now)", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  validateChallangeMiddleware(req, res, next);
+  await validateChallangeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(400);
   expect(next).not.toHaveBeenCalled();
 });
 
-test("should not validate game(enemy is playing now)", () => {
+test("should not validate game(enemy is playing now)", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: userNotPlaying1.username,
@@ -152,7 +158,7 @@ test("should not validate game(enemy is playing now)", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  validateChallangeMiddleware(req, res, next);
+  await validateChallangeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(400);
   expect(next).not.toHaveBeenCalled();

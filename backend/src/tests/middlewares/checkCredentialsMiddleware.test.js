@@ -1,3 +1,4 @@
+const database = require("../../models/database");
 const httpMocks = require("node-mocks-http");
 
 const { add, removeAll } = require("../../models/user");
@@ -11,16 +12,22 @@ const user = {
   passwordHash,
 };
 
-beforeEach(() => {
-  removeAll();
+database.connect();
+
+beforeAll(async () => {
+  await removeAll();
 });
 
-afterEach(() => {
-  removeAll();
+afterEach(async () => {
+  await removeAll();
 });
 
-test("should validate credentials", () => {
-  const id = add(user);
+afterAll(async () => {
+  await database.disconnect();
+});
+
+test("should validate credentials", async () => {
+  const id = await add(user);
 
   const req = httpMocks.createRequest({
     body: {
@@ -31,14 +38,14 @@ test("should validate credentials", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  checkCredentials(req, res, next);
+  await checkCredentials(req, res, next);
 
   expect(next).toBeCalledTimes(1);
   expect(req.body.id).toEqual(id);
   expect(req.body.username).toEqual(user.username);
 });
 
-test("should not validate credentials(requesting user does not exists)", () => {
+test("should not validate credentials(requesting user does not exists)", async () => {
   const req = httpMocks.createRequest({
     body: {
       username: user.username,
@@ -48,15 +55,15 @@ test("should not validate credentials(requesting user does not exists)", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  checkCredentials(req, res, next);
+  await checkCredentials(req, res, next);
 
   expect(next).not.toBeCalled();
   expect(req.body.id).not.toBeDefined();
   expect(res.statusCode).toEqual(404);
 });
 
-test("should not validate credentials(wrong password)", () => {
-  add(user);
+test("should not validate credentials(wrong password)", async () => {
+  await add(user);
 
   const req = httpMocks.createRequest({
     body: {
@@ -67,15 +74,15 @@ test("should not validate credentials(wrong password)", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  checkCredentials(req, res, next);
+  await checkCredentials(req, res, next);
 
   expect(next).not.toBeCalled();
   expect(req.body.id).not.toBeDefined();
   expect(res.statusCode).toEqual(400);
 });
 
-test("should not validate credentials(no password)", () => {
-  add(user);
+test("should not validate credentials(no password)", async () => {
+  await add(user);
 
   const req = httpMocks.createRequest({
     body: {
@@ -85,15 +92,15 @@ test("should not validate credentials(no password)", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  checkCredentials(req, res, next);
+  await checkCredentials(req, res, next);
 
   expect(next).not.toBeCalled();
   expect(req.body.id).not.toBeDefined();
   expect(res.statusCode).toEqual(400);
 });
 
-test("should not validate credentials(no username)", () => {
-  add(user);
+test("should not validate credentials(no username)", async () => {
+  await add(user);
 
   const req = httpMocks.createRequest({
     body: {
@@ -103,7 +110,7 @@ test("should not validate credentials(no username)", () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  checkCredentials(req, res, next);
+  await checkCredentials(req, res, next);
 
   expect(next).not.toBeCalled();
   expect(req.body.id).not.toBeDefined();

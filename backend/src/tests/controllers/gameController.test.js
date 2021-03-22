@@ -1,3 +1,5 @@
+const database = require("../../models/database");
+
 const httpMocks = require("node-mocks-http");
 const { Chess } = require("chess.js");
 
@@ -25,13 +27,15 @@ const notExistingUser = {
   passwordHash: "asdasdad",
 };
 
-beforeEach(() => {
-  user.removeAll();
+database.connect();
+
+beforeAll(async () => {
+  await user.removeAll();
   game.removeAll();
 
-  user.add(user1FromGame1);
-  user.add(user2FromGame1);
-  user.add(userNotPlaying1);
+  await user.add(user1FromGame1);
+  await user.add(user2FromGame1);
+  await user.add(userNotPlaying1);
 
   game.add({
     gameClient: new Chess(),
@@ -40,12 +44,14 @@ beforeEach(() => {
   });
 });
 
-afterEach(() => {
-  user.removeAll();
+afterAll(async () => {
+  await user.removeAll();
   game.removeAll();
+
+  await database.disconnect();
 });
 
-test("should response that is playing", () => {
+test("should response that is playing", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: user1FromGame1.username,
@@ -54,7 +60,7 @@ test("should response that is playing", () => {
 
   const res = httpMocks.createResponse();
 
-  checkIfPlaying(req, res);
+  await checkIfPlaying(req, res);
 
   const data = res.json()._getData();
   const game1 = game.findGameWithPlayer(user1FromGame1.username);
@@ -65,7 +71,7 @@ test("should response that is playing", () => {
   expect(data.blackPlayerName).toEqual(user2FromGame1.username);
 });
 
-test("should response that such user does not exist", () => {
+test("should response that such user does not exist", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: notExistingUser.username,
@@ -74,12 +80,12 @@ test("should response that such user does not exist", () => {
 
   const res = httpMocks.createResponse();
 
-  checkIfPlaying(req, res);
+  await checkIfPlaying(req, res);
 
   expect(res.statusCode).toEqual(404);
 });
 
-test("should response that is not playing", () => {
+test("should response that is not playing", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: userNotPlaying1.username,
@@ -88,7 +94,7 @@ test("should response that is not playing", () => {
 
   const res = httpMocks.createResponse();
 
-  checkIfPlaying(req, res);
+  await checkIfPlaying(req, res);
 
   expect(res.statusCode).toEqual(400);
 });

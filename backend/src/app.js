@@ -1,6 +1,7 @@
 const express = require("express");
 const socketio = require("socket.io");
 
+require("./models/database").connect();
 const userRouter = require("./routes/user");
 const gameRouter = require("./routes/game");
 const { socketEvents } = require("./handlers/helpers");

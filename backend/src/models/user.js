@@ -1,36 +1,48 @@
-let users = [];
+const mongoose = require("mongoose");
 
-function add(user) {
-  const id = users.length.toString();
+const userSchema = mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+  },
 
-  user.id = id;
-  users.push(user);
+  passwordHash: {
+    type: String,
+    required: true,
+  },
+});
 
-  return id;
+const User = mongoose.model("User", userSchema, "users");
+
+async function add(user) {
+  const newUser = new User({
+    username: user.username,
+    passwordHash: user.passwordHash,
+  });
+
+  await newUser.save();
+
+  return newUser._id.toString();
 }
 
-function get(username) {
-  for (let user of users) {
-    if (user.username === username) {
-      return user;
-    }
-  }
+async function get(username) {
+  return await User.findOne({ username: username });
 }
 
-function getAll() {
-  return users;
+async function getAll() {
+  return await User.find({});
 }
 
-function removeByUsername(username) {
-  users = users.filter((user) => user.username !== username);
+async function removeByUsername(username) {
+  return await User.remove({ username: username });
 }
 
-function removeById(id) {
-  users = users.filter((user) => user.id !== id);
+async function removeById(id) {
+  return await User.remove({ _id: id });
 }
 
-function removeAll() {
-  users = [];
+async function removeAll() {
+  return await User.remove({});
 }
 
 module.exports = {

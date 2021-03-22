@@ -4,10 +4,10 @@ const authHelpers = require("../auth/authHelpers");
 const generateJWTToken = authHelpers.generateJWTToken;
 const generatePasswordHash = authHelpers.generatePasswordHash;
 
-function register(req, res) {
+async function register(req, res) {
   const passwordHash = generatePasswordHash(req.body.password);
 
-  const userId = user.add({
+  const userId = await user.add({
     username: req.body.username,
     passwordHash,
   });
@@ -34,15 +34,17 @@ function login(req, res) {
   });
 }
 
-function getUserList(req, res) {
-  const userToValidate = user.get(req.jwt.username);
+async function getUserList(req, res) {
+  const userToValidate = await user.get(req.jwt.username);
 
   if (userToValidate == null) {
     return res.status(404).send({ errors: ["No such user. Register first"] });
   }
 
+  const userList = await user.getAll();
+
   res.status(200).send({
-    userList: user.getAll(),
+    userList: userList,
   });
 }
 

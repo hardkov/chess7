@@ -3,9 +3,9 @@ const { Chess } = require("chess.js");
 const user = require("../models/user");
 const game = require("../models/game");
 
-function startGame(req, res) {
-  const userToValidate = user.get(req.jwt.username);
-  const userToBeChallanged = user.get(req.body.username);
+async function startGame(req, res) {
+  const userToValidate = await user.get(req.jwt.username);
+  const userToBeChallanged = await user.get(req.body.username);
 
   game.add({
     gameClient: new Chess(),
@@ -16,8 +16,8 @@ function startGame(req, res) {
   res.status(201).send();
 }
 
-function checkIfPlaying(req, res) {
-  const userToValidate = user.get(req.jwt.username);
+async function checkIfPlaying(req, res) {
+  const userToValidate = await user.get(req.jwt.username);
 
   if (userToValidate == null) {
     return res.status(404).send({ errors: ["No such user. Register first"] });

@@ -1,8 +1,8 @@
 const user = require("../models/user");
 const validatePassword = require("../auth/authHelpers").validatePassword;
 
-function checkCredentials(req, res, next) {
-  let userToBeLogged = user.get(req.body.username);
+async function checkCredentials(req, res, next) {
+  const userToBeLogged = await user.get(req.body.username);
 
   if (userToBeLogged == null) {
     return res.status(404).send({ errors: ["No such user. Register first"] });

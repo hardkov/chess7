@@ -1,6 +1,6 @@
 const { get } = require("../models/user");
 
-const validateCredentialsMiddleware = (req, res, next) => {
+const validateCredentialsMiddleware = async (req, res, next) => {
   const { username, password } = req.body;
 
   if (username == null) {
@@ -19,7 +19,8 @@ const validateCredentialsMiddleware = (req, res, next) => {
     return res.status(400).send({ errors: ["Too short username"] });
   }
 
-  if (get(username) != null) {
+  const user = await get(username);
+  if (user != null) {
     return res
       .status(400)
       .send({ errors: ["User with that username already exists"] });
