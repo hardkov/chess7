@@ -1,12 +1,12 @@
 const express = require("express");
 const socketio = require("socket.io");
 
-const userRouter = require("./routes/user.js");
-const gameRouter = require("./routes/game.js");
+const userRouter = require("./routes/user");
+const gameRouter = require("./routes/game");
 const { socketEvents } = require("./handlers/helpers");
 const socketJWTMiddleware = require("./middlewares/socketJWTMIddleware");
-const socketUserMiddleware = require("./middlewares/socketUserMiddleware.js");
-const socketGameMiddleware = require("./middlewares/socketGameMiddleware.js");
+const socketUserMiddleware = require("./middlewares/socketUserMiddleware");
+const socketGameMiddleware = require("./middlewares/socketGameMiddleware");
 
 const port = process.env.PORT || 5000;
 const app = express();
