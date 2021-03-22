@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
-const uri =
-  "mongodb+srv://dbUser:dbUserPassword@chess7cluster.1v39d.mongodb.net/chess7?retryWrites=true&w=majority";
+const uri = process.env.MONGODB;
 
 const connect = () => {
   mongoose

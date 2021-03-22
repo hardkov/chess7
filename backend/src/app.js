@@ -1,6 +1,7 @@
 const express = require("express");
 const socketio = require("socket.io");
 
+require("dotenv").config();
 require("./models/database").connect();
 const userRouter = require("./routes/user");
 const gameRouter = require("./routes/game");

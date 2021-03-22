@@ -1,4 +1,4 @@
-const JWTSecret = "tajemiczy_sekret";
+const JWTSecret = process.env.JWT;
 
 module.exports = {
   JWTSecret,
