@@ -5,28 +5,33 @@ const actionTypes = {
 
 const reducer = (state, action) => {
   if (action.type === actionTypes.updateGame) {
-    for (let idx = 0; idx < state.gameList.length; idx++) {
-      const game = state.gameList[length];
+    const position = action.value.currentPosition;
+    const id = action.value.id;
+    const game = state.gameList.find((game) => game.id === id);
 
-      if (game.id === action.value.id) {
-        if (action.value.currentPosition == null) {
-          state.gameList.splice(idx, 1);
-        } else {
-          game.position = action.value.currentPosition;
-        }
-        return { ...state };
+    if (game) {
+      if (position) {
+        game.position = position;
+      } else {
+        state.gameList = state.gameList.filter((game) => game.id !== id);
       }
+
+      return { ...state };
     }
 
-    state.gameList.push({
-      id: action.value.id,
-      position: action.value.currentPosition,
-    });
+    if (position) {
+      state.gameList.push({
+        id: action.value.id,
+        position: position,
+      });
 
-    return { ...state };
+      return { ...state };
+    }
   } else if (action.type === actionTypes.setGames) {
     return { ...state, gameList: action.value.gameList };
   }
+
+  return state;
 };
 
 export { actionTypes, reducer };

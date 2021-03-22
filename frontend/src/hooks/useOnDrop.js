@@ -1,6 +1,6 @@
-import { makeMove } from "../services/gameService.js";
-import { actionTypes } from "../reducers/playReducer.js";
-import { validateMove, moveTypes } from "../helpers/chess.js";
+import { makeMove } from "../services/gameService";
+import { actionTypes } from "../reducers/playReducer";
+import { validateMove, moveTypes } from "../helpers/chess";
 
 const useOnDrop = (position, dispatch) => {
   const onDrop = async ({ sourceSquare, targetSquare }) => {

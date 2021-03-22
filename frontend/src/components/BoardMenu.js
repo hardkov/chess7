@@ -3,13 +3,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Chessboard from "chessboardjsx";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { Typography } from "@material-ui/core";
+import { Redirect } from "react-router";
 
 import GamePanel from "./GamePanel";
 import Animation from "./utils/Animation";
 import { getGameTurn, calcWidth, gameStates } from "../helpers/chess";
-import { Redirect } from "react-router";
 import { useActionExecutor } from "../hooks/useActionExecutor";
-import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   progress: {
+    marginTop: theme.spacing(8),
     marginLeft: "50%",
     color: theme.palette.primary.dark,
   },

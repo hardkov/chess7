@@ -6,7 +6,6 @@ import {
   Typography,
   IconButton,
   Button,
-  Badge,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import { makeStyles } from "@material-ui/core/styles";
@@ -40,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header() {
   const classes = useStyles();
-  const [user, buttons, accessGained, gameNotification] = useHeader();
+  const [user, buttons, accessGained] = useHeader();
 
   return (
     <div className={classes.root}>
@@ -51,13 +50,7 @@ export default function Header() {
             component={RouterLink}
             to="/"
           >
-            {gameNotification ? (
-              <Badge badgeContent={1} color="error">
-                <HomeIcon />
-              </Badge>
-            ) : (
-              <HomeIcon />
-            )}
+            <HomeIcon />
           </IconButton>
           <div className={classes.buttonContainer}>
             <Animation onRender>

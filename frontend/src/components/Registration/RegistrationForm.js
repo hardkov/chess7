@@ -1,6 +1,5 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -10,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { CircularProgress } from "@material-ui/core";
+
 import Animation from "../utils/Animation";
 
 const useStyles = makeStyles((theme) => ({

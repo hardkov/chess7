@@ -27,10 +27,10 @@ const challangePlayer = async (username) => {
 
     if (response.status === 201) {
       notifyAboutGame(username);
-      return true;
+      return { success: true };
     }
   } catch (error) {
-    return false;
+    return { success: false, error: error.response.data.errors[0] };
   }
 };
 

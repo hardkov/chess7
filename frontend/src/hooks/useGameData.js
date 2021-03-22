@@ -4,9 +4,9 @@ import {
   positionSource,
   openMoveConnection,
   closeMoveConnection,
-} from "../services/gameService.js";
-import { checkIfIsPlaying } from "../services/gameService";
-import { actionTypes, reducer } from "../reducers/playReducer.js";
+  checkIfIsPlaying,
+} from "../services/gameService";
+import { actionTypes, reducer } from "../reducers/playReducer";
 import { gameStates } from "../helpers/chess";
 
 const initialState = {
