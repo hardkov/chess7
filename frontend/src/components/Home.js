@@ -54,7 +54,7 @@ export default function Home() {
             spacing={2}
             direction={isSmallScreen ? "column" : "row"}
             justify="space-evenly"
-            alignItems="center"
+            alignItems={isSmallScreen ? "center" : "flex-start"}
           >
             <Grid item xs={isSmallScreen ? 10 : 3}>
               {isLoggedIn() ? <Users /> : <About />}

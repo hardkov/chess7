@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header() {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const isTinyScreen = useMediaQuery((theme) => theme.breakpoints.down("xs"));
   const classes = useStyles();
   const [user, buttons, accessGained] = useHeader();
 
@@ -71,7 +72,7 @@ export default function Header() {
               ))}
             </Animation>
           </div>
-          {accessGained && (
+          {accessGained && !isTinyScreen && (
             <Typography
               color="textPrimary"
               variant="h5"
