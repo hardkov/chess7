@@ -2,15 +2,15 @@
 Play chess with your friends on chess7!
 
 ## Technologies 
-* **backend** Node.js + Express.js
+* **Backend** Node.js + Express.js
 * **Database** MongoDB + Mongoose 
-* **real-time communication** Socket.js
-* **frontend** React.js + Material.ui + Chessboard.jsx
-* **testing** Jest
+* **Real-time communication** Socket.js
+* **Frontend** React.js + Material.ui + Chessboard.jsx
+* **Testing** Jest
 
 ## Features
 * Setting up an account
-* Playing chess games
+* :video_game: Playing chess games
 * Whatching games live
 * Real time notifications
 * Dark/light mode
