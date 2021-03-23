@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import { Snackbar, Switch } from "@material-ui/core";
+import { Snackbar, Switch, useMediaQuery } from "@material-ui/core";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 
 import Games from "./Games";
@@ -15,7 +15,7 @@ import useNotification from "../hooks/useNotification";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(16),
   },
 
   grid: {
@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Home() {
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const classes = useStyles();
   const toggle = useContext(ThemeChangeContext);
   const [gameNotification, off] = useNotification();
@@ -51,17 +52,17 @@ export default function Home() {
             className={classes.grid}
             container
             spacing={2}
-            direction="row"
+            direction={isSmallScreen ? "column" : "row"}
             justify="space-evenly"
-            alignItems="flex-start"
+            alignItems="center"
           >
-            <Grid item xs={3}>
+            <Grid item xs={isSmallScreen ? 10 : 3}>
               {isLoggedIn() ? <Users /> : <About />}
             </Grid>
-            <Grid item xs={5}>
+            <Grid item xs={isSmallScreen ? 10 : 5}>
               <Games />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={isSmallScreen ? 10 : 3}>
               <Ad />
             </Grid>
           </Grid>

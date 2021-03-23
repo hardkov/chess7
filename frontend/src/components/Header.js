@@ -6,6 +6,7 @@ import {
   Typography,
   IconButton,
   Button,
+  useMediaQuery,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import { makeStyles } from "@material-ui/core/styles";
@@ -38,12 +39,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header() {
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const classes = useStyles();
   const [user, buttons, accessGained] = useHeader();
 
   return (
     <div className={classes.root}>
-      <AppBar position="sticky">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             className={classes.iconButton}
@@ -58,6 +60,7 @@ export default function Header() {
                 <Button
                   key={idx}
                   className={classes.button}
+                  size={isSmallScreen ? "small" : "large"}
                   variant="contained"
                   color="secondary"
                   component={RouterLink}

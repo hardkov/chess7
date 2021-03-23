@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { Typography, useMediaQuery } from "@material-ui/core";
 
 import { currentUserValue } from "../services/authService";
 import useGameMenu from "../hooks/useGameMenu";
@@ -25,6 +25,7 @@ export default function GamePanel({
   onActionClick,
   drawOfferedBy,
 }) {
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const classes = useStyles();
   const [buttons, gameStateMessage] = useGameMenu(
     gameState,
@@ -49,7 +50,7 @@ export default function GamePanel({
           <Typography color="textPrimary">{gameStateMessage}</Typography>
           <ButtonGroup
             fullWidth={true}
-            size="large"
+            size={isSmallScreen ? "small" : "large"}
             orientation="vertical"
             color="secondary"
             variant="contained"

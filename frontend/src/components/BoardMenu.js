@@ -13,11 +13,11 @@ import { useActionExecutor } from "../hooks/useActionExecutor";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(20),
   },
 
   progress: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(16),
     marginLeft: "50%",
     color: theme.palette.primary.dark,
   },
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flex: 1,
     justifyContent: "center",
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(16),
   },
 }));
 

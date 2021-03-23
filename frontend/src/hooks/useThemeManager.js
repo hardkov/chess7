@@ -37,7 +37,7 @@ const darkTheme = createMuiTheme({
   },
 });
 
-const useTheme = () => {
+const useThemeManager = () => {
   const [currentTheme, setCurrentTheme] = useState(defaultTheme);
   const [currentThemeName, setCurrentThemeName] = useState("default");
 
@@ -54,4 +54,4 @@ const useTheme = () => {
   return [currentTheme, toggle];
 };
 
-export default useTheme;
+export default useThemeManager;

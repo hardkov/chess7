@@ -8,12 +8,12 @@ import {
   openConnection,
   openUserConnection,
 } from "../services/userService";
-import useTheme from "../hooks/useTheme";
+import useThemeManager from "../hooks/useThemeManager";
 import ThemeChangeContext from "../context/ThemeChangeContext";
 import { isLoggedIn } from "../services/authService";
 
 export default function App() {
-  const [theme, toggle] = useTheme();
+  const [theme, toggle] = useThemeManager();
 
   useEffect(() => {
     openConnection();
