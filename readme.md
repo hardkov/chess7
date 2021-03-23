@@ -1,4 +1,4 @@
-# Chess7
+# ♚ Chess7 ♚
 Play chess with your friends on chess7!
 
 ## Technologies 
@@ -9,16 +9,21 @@ Play chess with your friends on chess7!
 * **Testing** Jest
 
 ## Features
-* Setting up an account
-* :video_game: Playing chess games
-* Whatching games live
-* Real time notifications
-* Dark/light mode
+* 👤Setting up an account
+* ♜ Playing chess games
+* 📺Watching games live
+* 🔔Real time notifications
+* 🌔Dark/light mode
 
 ## Overview
 // some gifs and screenshots
 
 ## Issues
 * kind of weird on mobile, but usable
+
+## TODO
+* Game history
+* User profile
+* Multilingualism
 
 ## Run locally
