@@ -15,7 +15,7 @@ import useNotification from "../hooks/useNotification";
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(16),
   },
 
   grid: {
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flex: 1,
     justifyContent: "flex-end",
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(10),
   },
 
   snackbar: {
