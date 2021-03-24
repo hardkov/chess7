@@ -50,7 +50,7 @@ const BoardMenu = ({
     return (
       <div className={classes.infoContainer}>
         <Typography color="textSecondary" variant="h5">
-          You are not playing right now. Come back here when you challange
+          You are not playing right now. Come back here when you challenge
           someone
         </Typography>
       </div>

@@ -75,7 +75,7 @@ export default function Home() {
         ContentProps={{
           className: classes.snackbar,
         }}
-        message="You have been challanged. Go to Play section."
+        message="You have been challenged. Go to Play section."
       />
     </>
   );

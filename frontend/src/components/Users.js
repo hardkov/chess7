@@ -69,7 +69,7 @@ export default function Users() {
                     variant="contained"
                     onClick={() => challangeSelectedPlayer(user.username)}
                   >
-                    Challange
+                    Challenge
                   </Button>
                 </TableCell>
               </TableRow>
