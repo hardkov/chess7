@@ -5,13 +5,13 @@ Play chess with your friends on chess7!
 * **Backend** Node.js + Express.js
 * **Database** MongoDB + Mongoose 
 * **Real-time communication** Socket.js
-* **Frontend** React.js + Material.ui + Chessboard.jsx
+* **Frontend** React.js + Material UI + Chessboard.jsx
 * **Testing** Jest
 
 ## Features
 * 👤 Setting up an account
-* ♜  Playing chess games
-* 📺 Watching games live
+* ♜  Playing chess
+* 📺 Watching live games
 * 🔔 Real time notifications
 * 🌔 Dark/light mode
 
@@ -29,7 +29,6 @@ Play chess with your friends on chess7!
 
 ## Issues
 * Kind of weird on mobile, but usable
-* After rematch you need to go home and then back to /play to see the new game
 
 ## TODO
 * Game history
