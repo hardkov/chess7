@@ -3,7 +3,7 @@ const database = require("../../models/database");
 const { Chess } = require("chess.js");
 const httpMocks = require("node-mocks-http");
 
-const validateChallangeMiddleware = require("../../middlewares/validateChallangeMiddleware");
+const validateChallengeMiddleware = require("../../middlewares/validateChallengeMiddleware");
 const user = require("../../models/user");
 const game = require("../../models/game");
 
@@ -68,7 +68,7 @@ test("should validate game", async () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  await validateChallangeMiddleware(req, res, next);
+  await validateChallengeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(200);
   expect(next).toHaveBeenCalled();
@@ -86,13 +86,13 @@ test("should not validate game(requesting user does not exists)", async () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  await validateChallangeMiddleware(req, res, next);
+  await validateChallengeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(404);
   expect(next).not.toHaveBeenCalled();
 });
 
-test("should not validate game(user to be challanged does not exist)", async () => {
+test("should not validate game(user to be challenged does not exist)", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: userNotPlaying1.username,
@@ -104,13 +104,13 @@ test("should not validate game(user to be challanged does not exist)", async () 
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  await validateChallangeMiddleware(req, res, next);
+  await validateChallengeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(404);
   expect(next).not.toHaveBeenCalled();
 });
 
-test("should not validate game(can't challange yourself)", async () => {
+test("should not validate game(can't challenge yourself)", async () => {
   const req = httpMocks.createRequest({
     jwt: {
       username: userNotPlaying1.username,
@@ -122,7 +122,7 @@ test("should not validate game(can't challange yourself)", async () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  await validateChallangeMiddleware(req, res, next);
+  await validateChallengeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(400);
   expect(next).not.toHaveBeenCalled();
@@ -140,7 +140,7 @@ test("should not validate game(you are playing now)", async () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  await validateChallangeMiddleware(req, res, next);
+  await validateChallengeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(400);
   expect(next).not.toHaveBeenCalled();
@@ -158,7 +158,7 @@ test("should not validate game(enemy is playing now)", async () => {
   const res = httpMocks.createResponse();
   const next = jest.fn();
 
-  await validateChallangeMiddleware(req, res, next);
+  await validateChallengeMiddleware(req, res, next);
 
   expect(res.statusCode).toEqual(400);
   expect(next).not.toHaveBeenCalled();

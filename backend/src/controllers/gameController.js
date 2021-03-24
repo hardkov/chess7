@@ -5,12 +5,12 @@ const game = require("../models/game");
 
 async function startGame(req, res) {
   const userToValidate = await user.get(req.jwt.username);
-  const userToBeChallanged = await user.get(req.body.username);
+  const userToBeChallenged = await user.get(req.body.username);
 
   game.add({
     gameClient: new Chess(),
     whitePlayerName: userToValidate.username,
-    blackPlayerName: userToBeChallanged.username,
+    blackPlayerName: userToBeChallenged.username,
   });
 
   res.status(201).send();

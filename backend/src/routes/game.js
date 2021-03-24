@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 
 const gameController = require("../controllers/gameController");
 const JWTMiddleware = require("../middlewares/JWTMiddleware");
-const validateChallangeMiddleware = require("../middlewares/validateChallangeMiddleware");
+const validateChallengeMiddleware = require("../middlewares/validateChallengeMiddleware");
 
 const router = express.Router();
 const jsonParser = bodyParser.json();
@@ -12,7 +12,7 @@ router.post(
   "/start",
   JWTMiddleware,
   jsonParser,
-  validateChallangeMiddleware,
+  validateChallengeMiddleware,
   gameController.startGame
 );
 
