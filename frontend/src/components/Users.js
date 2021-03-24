@@ -34,7 +34,7 @@ export default function Users() {
     redirect,
     error,
     off,
-    challangeSelectedPlayer,
+    challengeSelectedPlayer,
   ] = useUserList();
 
   if (redirect) return <Redirect to="/play" />;
@@ -67,7 +67,7 @@ export default function Users() {
                     color="secondary"
                     aria-label="vertical outlined primary button group"
                     variant="contained"
-                    onClick={() => challangeSelectedPlayer(user.username)}
+                    onClick={() => challengeSelectedPlayer(user.username)}
                   >
                     Challenge
                   </Button>

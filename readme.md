@@ -22,7 +22,7 @@ Play chess with your friends on chess7!
 ![notification](readme_files/notification.gif)
 ### Games
 ![playing](readme_files/playing.gif)
-![challange_error](readme_files/challange_error.gif)  
+![challenge_error](readme_files/challenge_error.gif)  
 ![watching](readme_files/watching.gif)
 ### Dark mode
 ![darkmode](readme_files/darkmode.gif)

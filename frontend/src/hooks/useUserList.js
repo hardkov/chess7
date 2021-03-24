@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { getUserList } from "../services/userService";
-import { challangePlayer } from "../services/gameService";
+import { challengePlayer } from "../services/gameService";
 
 const useUserList = () => {
   const [userList, setUserList] = useState([]);
@@ -17,8 +17,8 @@ const useUserList = () => {
     fetchData();
   }, []);
 
-  const challangeSelectedPlayer = async (username) => {
-    const result = await challangePlayer(username);
+  const challengeSelectedPlayer = async (username) => {
+    const result = await challengePlayer(username);
 
     if (result.success) {
       setRedirect(true);
@@ -32,7 +32,7 @@ const useUserList = () => {
     redirect,
     error,
     () => setError({ occured: false, message: "" }),
-    challangeSelectedPlayer,
+    challengeSelectedPlayer,
   ];
 };
 

@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { ReplaySubject } from "rxjs";
 
 import {
-  CHALLANGE_ENDPOINT,
+  CHALLENGE_ENDPOINT,
   GAME_LIST_ENDPOINT,
   IS_PLAYING_ENDPOINT,
   SOCKET_MOVE_ENDPOINT,
@@ -17,10 +17,10 @@ import { notifyAboutGame } from "./userService";
 let moveSocket;
 const positionSourceSubject = new ReplaySubject(1);
 
-const challangePlayer = async (username) => {
+const challengePlayer = async (username) => {
   try {
     const response = await axios.post(
-      CHALLANGE_ENDPOINT,
+      CHALLENGE_ENDPOINT,
       { username: username },
       { headers: authHeaders() }
     );
@@ -113,7 +113,7 @@ export {
   openMoveConnection,
   closeMoveConnection,
   makeMove,
-  challangePlayer,
+  challengePlayer,
   checkIfIsPlaying,
   getGameList,
   offerDraw,

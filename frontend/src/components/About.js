@@ -12,7 +12,7 @@ const About = () => {
       </Typography>
       <Typography color="textPrimary">
         Page you are seeing right now is my personal project. It features
-        challanging people and watching live games. Technologies used for this
+        challenging people and watching live games. Technologies used for this
         project: Node.js, React, Socket.io and Jest for testing. Feel free to
         register and try it out!
       </Typography>

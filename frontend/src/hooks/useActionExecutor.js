@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import {
   acceptDraw,
-  challangePlayer,
+  challengePlayer,
   declineDraw,
   offerDraw,
   surrender,
@@ -24,9 +24,9 @@ const useActionExecutor = (enemy) => {
     } else if (action === actionTypes.newOpponent) {
       setRedirect("/");
     } else if (action === actionTypes.rematch) {
-      const isChallanged = await challangePlayer(enemy);
+      const isChallenged = await challengePlayer(enemy);
 
-      if (isChallanged) {
+      if (isChallenged) {
         setRedirect("/");
       }
     }
