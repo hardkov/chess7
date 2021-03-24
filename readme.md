@@ -24,12 +24,12 @@ Play chess with your friends on chess7!
 ![playing](readme_files/playing.gif)
 ![challange_error](readme_files/challange_error.gif)  
 ![watching](readme_files/watching.gif)
-### Darkmode
+### Dark mode
 ![darkmode](readme_files/darkmode.gif)
 
 ## Issues
 * Kind of weird on mobile, but usable
-* After rematch you need to go home and then back to /play
+* After rematch you need to go home and then back to /play to see the new game
 
 ## TODO
 * Game history
@@ -37,3 +37,23 @@ Play chess with your friends on chess7!
 * Multilingualism
 
 ## Run locally
+* Clone the repositiory
+```bash
+git clone https://github.com/hardkov/chess7.git
+```
+* Set endpoints on frontend
+```bash
+vim frontend/src/services/config.js
+```
+```js
+// wherever your server is
+axios.defaults.baseURL = "http://localhost:5000";
+const SOCKET_BASE_URL = "ws://localhost:5000";
+```
+* Configure backend (server port, database uri, jwt secret)
+```bash
+vim backend/.env
+
+PORT=
+MONGODB=""
+JWT=""
