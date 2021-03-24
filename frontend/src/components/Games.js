@@ -1,4 +1,5 @@
 import React from "react";
+import { useMediaQuery } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
@@ -8,6 +9,7 @@ import Chessboard from "chessboardjsx";
 import useGames from "../hooks/useGames";
 
 const Games = () => {
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const state = useGames();
 
   const games = state.gameList.map((game) => (
@@ -29,6 +31,7 @@ const Games = () => {
       </Typography>
       <Grid
         container
+        direction={isSmallScreen ? "column" : ""}
         justify="space-between"
         alignItems="flex-start"
         spacing={2}
